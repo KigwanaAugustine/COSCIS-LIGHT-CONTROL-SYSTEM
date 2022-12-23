@@ -16,7 +16,7 @@ void store_password(char *user_password)
 
 
 
-//retrieve user password form eeprom
+//retrieve user password from eeprom
 void get_password(char password[PASSWORD_LENGTH])
 {
 	eeprom_read_block((void*)password, (const void*)EEPROM_ADDRESS, PASSWORD_LENGTH); //read data from eeprom
