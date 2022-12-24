@@ -30,6 +30,9 @@
 #define LLT4_SWITCH PC3
 #define SECURITY_SWITCH PA4
 
+//SENSOR PINS AND PORTS
+#define LDR PC5
+
 //PORTS PORTS AND PINS
 #define LIGHTS_PORT PORTA
 #define LIGHTS_SWITCH PINC
@@ -42,6 +45,8 @@ void light_on(int pin);
 void light_off(int pin); 
 void mcu_init(); 
 void manual_light_switch(); //switch lights on and off manually
+int  switch_pressed(int pin);
+int check_light_intensity();
 
 int main(void)
 {
@@ -49,11 +54,42 @@ int main(void)
 	
     while (1)
 	{
-		
 		manual_light_switch();
+
+		if(check_light_intensity())  //if darkness is detected, turn on security light
+		{
+			light_on(SECURITY);
+		}
 		
 	}
-    
+}
+
+//returns 1 for low light intensity and a 0 for high intensity
+int check_light_intensity()
+{
+	if ( (LIGHTS_SWITCH & (1<<LDR)) == 0)
+	{
+		return 1;
+	} 
+	else
+	{
+		return 0;
+	}
+}
+
+//returns a 1 if switch on a given pin is pressed or else returns a 0
+int  switch_pressed(int pin)
+{
+	if ((LIGHTS_SWITCH & (1<<pin)) == 0)
+	{
+		return 1;
+	} 
+	else
+	{
+		return 0;
+	}
+
+	
 }
 
 //initialize micro controller
@@ -63,61 +99,7 @@ void mcu_init()
 	DDRC = 0x00;//set port C as input
 }
 
-void manual_light_switch()
-{
-	
-	if ( (LIGHTS_SWITCH && (1<<LLT1_SWITCH)) == 0 )
-	{
-		light_on(LLT1);
-	}
-	else
-	{
-		light_off(LLT1);
-	} 
-	
-	
-	if ( (LIGHTS_SWITCH && (1<<LLT2_SWITCH)) == 0 )
-	{
-		light_on(LLT2);
-	}
-	else
-	{
-		light_off(LLT2);
-	} 
-	
-	
-	if ( (LIGHTS_SWITCH && (1<<LLT3_SWITCH)) == 0 )
-	{
-		light_on(LLT3);
-	}
-	else
-	{
-		light_off(LLT3);
-	}
-	
-	
-	
-	if ( (LIGHTS_SWITCH && (1<<LLT4_SWITCH)) == 0 )
-	{
-		light_on(LLT4);
-	}
-	else
-	{
-		light_off(LLT4);
-	} 
 
-	
-	
-	if ( (LIGHTS_SWITCH && (1<<SECURITY_SWITCH)) == 0 )
-	{
-		light_on(SECURITY);
-	}
-	else
-	{
-		light_off(SECURITY);
-	} 
-	
-}
 
 //switch on light connected to pin 
 void light_on(int pin)
@@ -143,4 +125,55 @@ void store_password(char *user_password)
 void get_password(char password[PASSWORD_LENGTH])
 {
 	eeprom_read_block((void*)password, (const void*)EEPROM_ADDRESS, PASSWORD_LENGTH);
+}
+
+
+void manual_light_switch()
+{
+	
+	if (switch_pressed(LLT1_SWITCH))
+	{
+		light_on(LLT1);
+	}
+	else
+	{
+		light_off(LLT1);
+	}
+	
+	
+	if(switch_pressed(LLT2_SWITCH))
+	{
+		light_on(LLT2);
+	}
+	else
+	{
+		light_off(LLT2);
+	}
+	
+	if(switch_pressed(LLT3_SWITCH))
+	{
+		light_on(LLT3);
+	}
+	else
+	{
+		light_off(LLT3);
+	}
+	
+	if(switch_pressed(LLT4_SWITCH))
+	{
+		light_on(LLT4);
+	}
+	else
+	{
+		light_off(LLT4);
+	}
+	
+	if(switch_pressed(SECURITY_SWITCH))
+	{
+		light_on(SECURITY);
+	}
+	else
+	{
+		light_off(SECURITY);
+	}
 }
