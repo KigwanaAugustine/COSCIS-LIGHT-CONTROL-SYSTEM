@@ -32,6 +32,8 @@
 
 //SENSOR PINS AND PORTS
 #define LDR PC5
+#define PIR PC6
+
 
 //PORTS PORTS AND PINS
 #define LIGHTS_PORT PORTA
@@ -47,6 +49,7 @@ void mcu_init();
 void manual_light_switch(); //switch lights on and off manually
 int  switch_pressed(int pin);
 int check_light_intensity();
+int detect_motion();
 
 int main(void)
 {
@@ -60,14 +63,47 @@ int main(void)
 		{
 			light_on(SECURITY);
 		}
+
+		if(detect_motion()) 
+		{
+			light_on(LLT2);
+		}
+		else
+		{
+			light_off(LLT2);
+		}
+		
 		
 	}
 }
 
+
+//initialize micro controller
+void mcu_init()
+{
+	DDRA = 0xFF;//set lights port as output
+	DDRC = 0x00;//set port C as input
+	LIGHTS_PORT |= (1 << PIR); // Enable pull-up resistor
+}
+
+//return a 1 upon detecting motion else return a 0
+int detect_motion()
+{
+	 if(LIGHTS_SWITCH & (1 << PIR))
+        {
+            return 1;
+        }
+	 else
+		{
+			return 0;
+		}
+}
+
+
 //returns 1 for low light intensity and a 0 for high intensity
 int check_light_intensity()
 {
-	if ( (LIGHTS_SWITCH & (1<<LDR)) == 0)
+	if ( (LIGHTS_SWITCH & (1<<LDR)) == 1)
 	{
 		return 1;
 	} 
@@ -92,12 +128,7 @@ int  switch_pressed(int pin)
 	
 }
 
-//initialize micro controller
-void mcu_init()
-{
-	DDRA = 0xFF;//set lights port as output
-	DDRC = 0x00;//set port C as input
-}
+
 
 
 

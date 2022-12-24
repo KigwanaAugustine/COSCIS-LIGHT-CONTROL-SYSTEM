@@ -7,3 +7,4 @@ light_control_system/.vs/light_control_system/v14/.atsuo
 *.lss
 *.hex
 *.elf
+*.srec
