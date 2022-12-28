@@ -5,7 +5,7 @@
  * Author : Tanuki
  */ 
 
-#define F_CPU 1000000UL
+#define F_CPU 16000000UL
 
 #include <avr/io.h>
 #include <avr/eeprom.h>  /* Include AVR EEPROM header file */
@@ -39,6 +39,8 @@
 #define LIGHTS_PORT PORTA
 #define LIGHTS_SWITCH PINC
 
+char rx_buffer[128];  // Buffer to store received string
+uint8_t rx_index = 0;  // Index to store received characters
 
 
 void store_password(char *user_password); 
@@ -46,10 +48,15 @@ void get_password(char password[PASSWORD_LENGTH]);
 void light_on(int pin);  
 void light_off(int pin); 
 void mcu_init(); 
+void USART_Transmit_String(char* string);
+void USART_Transmit(unsigned char data);
 void manual_light_switch(); //switch lights on and off manually
 int  switch_pressed(int pin);
 int check_light_intensity();
 int detect_motion();
+void login();
+void register_user();
+
 
 int main(void)
 {
@@ -78,12 +85,78 @@ int main(void)
 }
 
 
+ISR(USART_RXC_vect) {
+	char flag = UDR;  // Read the received character
+
+	switch (flag)
+	{
+	case 'L': //login user 
+		login();
+		break;
+	
+	case 'R': //register user
+		void register_user();
+		break;
+	
+	default:
+		break;
+	}
+	
+}
+
+void register_user()
+{
+
+	//receive password
+	//receive username
+	//store password
+	//store username 
+
+	//USE THIS TO RECEIVE A STRING 
+	/*char received_char = UDR;  // Read the received character
+	if (received_char == '\n') {  // If end of string is received
+		rx_buffer[rx_index] = '\0';  // Add null terminator to the string
+		rx_index = 0;  // Reset the index
+		// Process the received string here
+	}
+	else {  // Otherwise, store the received character in the buffer
+		rx_buffer[rx_index] = received_char;
+		rx_index++;
+	} */
+}
+
+//sends the password and username for verification to the mobile app at login
+void login()
+{
+	char password[PASSWORD_LENGTH];
+	char username[PASSWORD_LENGTH];
+
+	get_password(password);
+	get_password(username);
+
+	// Enable transmitter
+	UCSRB |= (1 << TXEN);
+
+	//TO-DO , convert the arrays password and username into strings before sending them
+
+	//transmit both string and password
+	USART_Transmit_String(password);
+	USART_Transmit_String(username);
+}
+
+
 //initialize micro controller
 void mcu_init()
 {
 	DDRA = 0xFF;//set lights port as output
 	DDRC = 0x00;//set port C as input
+	
 	LIGHTS_PORT |= (1 << PIR); // Enable pull-up resistor
+	
+	UBRRL = 0X67; //Set baud rate to 9600 for 16MHz clock 
+	UCSRC = (1 << UCSZ1) | (1 << UCSZ0); // Set frame format: 8 data bits, 1 stop bit
+	sei();  // Enable global interrupts
+
 }
 
 //return a 1 upon detecting motion else return a 0
@@ -129,6 +202,26 @@ int  switch_pressed(int pin)
 }
 
 
+
+void USART_Transmit(unsigned char data)
+{
+	// Wait for empty transmit buffer
+	while (!(UCSRA & (1 << UDR)));
+
+	_delay_ms(100);
+	
+	// Put data into buffer, sends the data
+	UDR = data;
+}
+
+void USART_Transmit_String(char* string)
+{
+	while (*string)
+	{
+		USART_Transmit(*string);
+		string++;
+	}
+}
 
 
 
@@ -208,3 +301,54 @@ void manual_light_switch()
 		light_off(SECURITY);
 	}
 }
+
+/* C CODE TO TRANSMIT STRING via UART atmega32
+
+void usart_init(void)
+{
+	// Set baud rate to 9600
+	UBRRL = 0X67; // for 16MHz clock or 0x33 for 8MHz clock
+
+	// Enable transmitter
+	UCSRB = (1 << TXEN); OR UCSRB = (1 << RXEN); // for either transmission or reception
+	
+	
+	// Set frame format: 8 data bits, 1 stop bit
+	UCSRC = (1 << UCSZ1) | (1 << UCSZ0) | (1 << URSEL);
+}
+
+char USART_receive(void)
+{
+	// Wait for the entire byte to be received
+	while(!(UCSRA & (1<<RXC) ));
+	_delay_ms(100); //random delay
+	
+	data = UDR;
+	
+	return data;
+	
+}
+
+
+void USART_Transmit(unsigned char data)
+{
+	// Wait for empty transmit buffer
+	while (!(UCSRA & (1 << UDR)));
+
+	_delay_ms(100);
+	
+	// Put data into buffer, sends the data
+	UDR = data;
+}
+
+void USART_Transmit_String(char* string)
+{
+	while (*string)
+	{
+		USART_Transmit(*string);
+		string++;
+	}
+}
+
+
+*/
