@@ -7,7 +7,7 @@ const int SIZE=6;
 #include<util/delay.h>
 
 
-//initialize serial reception and transmission
+//initialize serial reception
 void usart_init(void){
 	DDRB=0xff;
 	UCSRB =(1<<RXEN)|(1<<TXEN);
@@ -17,12 +17,12 @@ void usart_init(void){
 
 
 //void usart_init_send(void){
-	//DDRB=0xff;
-	//UCSRB =(1<<TXEN);
-	//UCSRC=(1<<UCSZ1)|(1<<UCSZ0)|(1<<URSEL);
-	//UBRRL=0X67;
+//DDRB=0xff;
+//UCSRB =(1<<TXEN);
+//UCSRC=(1<<UCSZ1)|(1<<UCSZ0)|(1<<URSEL);
+//UBRRL=0X67;
 //}
-//SEND A CHARACTER TO THE APP 
+
 void usart_send(unsigned char j){
 	//DDRB=0xff
 	while (!(UCSRA &(1<<UDRE)));
@@ -30,9 +30,8 @@ void usart_send(unsigned char j){
 	UDR=j;
 	
 }
-//LIGHTS CONTROL 
-void switch_onlights(void)
-{
+//LIGHTS CONTROL
+void switch_onlights(void){
 	while (!(UCSRA &(1<<RXC)));
 	_delay_ms(100);
 
@@ -78,46 +77,45 @@ void switch_onlights(void)
 int main(void)
 {
 	
-	 /* DDRA =0x00;
-	  PORTA |=(1<<0);
-	  DDRC=0xff;
-	  if ((PINA &(1<<0))==0)
-	  {
-		 PORTB |=1<<PB4;
-	  }*/
-	  
-		unsigned char x[]={"Smartsam125$%&*^%$#@"};//characater array to be recieved from eeprom
-		unsigned char i=0;
-		
-		usart_init();//call the usart initialization function
+	DDRA =0x00;
+	PORTA |=(1<<0);
+	DDRC=0xff;
+	if ((PINA &(1<<0))==0)
+	{
+		PORTB |=1<<PB4;
+	}
 	
-    
-    while (1) 
-    {  
-		 
+	unsigned char x[]={"Smartsam125$%&*^%$#@"};
+	unsigned char i=0;
+	
+	usart_init();
+	
+	
+	while (1)
+	{
+		
 		//usartRecieve();
+		switch_onlights();
+		
 		while (!(UCSRA &(1<<RXC)));
 		_delay_ms(100);
 		
-		//Main switch to twigger login,lights,doors etc
+		
 		switch(UDR){
-    /
 			case 'X':
-      //call lights swithcing function when data is recieved
 			
-				switch_onlights();
-				
+			switch_onlights();
+			
 			
 			
 			break;
-      //log in case
 			case 'Y':
 			{
-			    for (int k=0;k<strlen(x);k++)
-			    {
+				for (int k=0;k<strlen(x);k++)
+				{
 					usart_send(x[k]);
 					
-					}
+				}
 				//usart_send(x[i++]);
 				//if(x[i]==0);
 				//i=0;
@@ -139,4 +137,3 @@ int main(void)
 		
 	}
 }
-
