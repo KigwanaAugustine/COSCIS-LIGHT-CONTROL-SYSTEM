@@ -17,11 +17,25 @@
 #define EEPROM_ADDRESS 0 // address of the password in EEPROM
 #define PASSWORD_LENGTH 20   // size of the password
 
+
+//DOORS
+#define DOOR_PORT PORTB
+#define DOOR_PIN  PINB
+#define LLT1_DOOR_PIN1 PB0
+#define LLT1_DOOR_PIN2 PB1
+#define LLT2_DOOR_PIN1 PB2
+#define LLT2_DOOR_PIN2 PB3
+#define LLT2_DOOR_OPEN_BUTTON   PB4
+#define LLT2_DOOR_CLOSE_BUTTON  PB5
+#define LLT1_DOOR_OPEN_BUTTON   PB6
+#define LLT1_DOOR_CLOSE_BUTTON  PB7
+
 //LIGHTS
 #define LLT1 PA0
 #define LLT2 PA1
 #define LLT3 PA2
 #define LLT4 PA3
+#define APP_LED PA5
 #define SECURITY PA4
 
 //LIGHT SWITCHES
@@ -33,11 +47,14 @@
 
 //SENSOR PINS AND PORTS
 #define LDR PC5
-#define PIR PC6
+#define LLT1_PIR PC6
+#define LLT2_PIR PC7
 
 
 //PORTS PORTS AND PINS
 #define LIGHTS_PORT PORTA
+#define PIR_PIN PINC
+#define LDR_PIN PINC
 #define LIGHTS_SWITCH PINC
 
 char rx_buffer[128];  // Buffer to store received string
@@ -56,7 +73,7 @@ void USART_Transmit(unsigned char data);
 void manual_light_switch(); //switch lights on and off manually
 int  switch_pressed(int pin);
 int check_light_intensity();
-int detect_motion();
+int detect_motion(int PIR_pin);
 void login();
 void register_user();
 void USART_send_byte(unsigned char data);
@@ -64,17 +81,48 @@ void USART_send_array(char *array, int array_length);
 char * receive_UDR_string();
 void switch_on();
 void switch_off();
+void all_lights_off();
+void all_lights_on();
+void open_door(int door_pin1, int door_pin2);
+void close_door(int door_pin1, int door_pin2);
 
 
 int main(void)
 {
+		
 	mcu_init(); //initialize microcontroller
 	
     while (1)
 	{
-		//manual_light_switch();
+	
+		//close_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
 
-		if(check_light_intensity())  //if darkness is detected, turn on security light
+		//opening door
+		if (! ((DOOR_PIN) & (1<<LLT1_DOOR_OPEN_BUTTON)) )
+		{
+			open_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
+		}
+		// else
+		// {
+		// 	PORTB |= (1 << LLT1_DOOR_OPEN_BUTTON);
+		// }
+
+
+		//closing door
+		if ( !((DOOR_PIN) & (1<<LLT1_DOOR_CLOSE_BUTTON)) )
+		{
+			close_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
+		}
+		// else
+		// {
+		// 	DDRB &= ~(1<<PB0);
+		// 	//DDRB &= ~(1<<PB1);
+		// }
+
+		
+
+		//turn on security light when low light intensity is detected
+		if(check_light_intensity())
 		{
 			light_on(SECURITY);
 		}
@@ -84,23 +132,68 @@ int main(void)
 		}
 		
 
-		if(detect_motion()) 
+		while(!1)  //if night time(9:30pm to 6:59am) 
 		{
-			light_on(LLT2);
+			_delay_ms(20);
+
+			light_on(SECURITY);
+
+			all_lights_off();
+
+			if(detect_motion(LLT1_PIR)) //if motion is detected in LLT1
+			{
+				light_on(LLT1);
+				//raise alarm for 10s
+				//close door
+			}
+			
+			if(detect_motion(LLT2_PIR)) //if motion is detected in LLT2
+			{
+				light_on(LLT2);
+				//raise alarm for 10s
+				//close door
+			}
+			
+
 		}
-		else
+
+		while(!1)  //if day time(7am to 7pm) 
 		{
-			light_off(LLT2);
+			_delay_ms(20);
+
+			manual_light_switch(); //activate manual switches
+
+			//all_lights_off();
+
+			//Motion detected in LLT1 with low light intensity , switch on LLT1 light
+			if (check_light_intensity() & detect_motion(LLT1_PIR))
+			{
+				light_on(LLT1);
+			}
+			else
+			{
+				light_off(LLT1);
+			}
+
+			//Motion detected in LLT2 with low light intensity , switch on LLT2 light
+			if (check_light_intensity() & detect_motion(LLT2_PIR))
+			{
+				light_on(LLT2);
+			}
+			else
+			{
+				light_off(LLT2);
+			}
+
 		}
-		
-		
 	}
 }
 
 
 ISR(USART_RXC_vect) {
 	
-	light_on(SECURITY);
+	light_on(APP_LED);
+	
 	
 	char flag = UDR;  // Read the received character
 	
@@ -116,11 +209,11 @@ ISR(USART_RXC_vect) {
 		register_user();
 		break;
 
-	case 'S': //switch on light
+	case 'O': //switch on light
 		switch_on();
 		break;
 
-	case 'O': //switch off light
+	case 'F': //switch off light
 		switch_off();
 		break;
 
@@ -136,14 +229,30 @@ ISR(USART_RXC_vect) {
 		break;
 	}
 	
-	light_off(SECURITY);
+	_delay_ms(100);
+
+	light_off(APP_LED);
 	
+}
+
+
+void open_door(int door_pin1, int door_pin2)
+{
+	DOOR_PORT |= (1<<door_pin1); 
+	DOOR_PORT &= ~(1<<door_pin2); 
+}
+
+void close_door(int door_pin1, int door_pin2)
+{
+	DOOR_PORT |= (1<<door_pin2); 
+	DOOR_PORT &= ~(1<<door_pin1); 
 }
 
 
 //function that switches off desired light using mobile app
 void switch_off()
 {
+
 	char  room_light = *(receive_UDR_string());
 	
 	if (room_light == '1')
@@ -179,32 +288,32 @@ void switch_on()
 	if (room_light == '1')
 	{
 		light_on(LLT1);
-		_delay_ms(100);
-		light_off(LLT1);
+		// _delay_ms(100);
+		// light_off(LLT1);
 	}
 	else if (room_light == '2')
 	{
 		light_on(LLT2);
-		_delay_ms(100);
-		light_off(LLT2);
+		// _delay_ms(100);
+		// light_off(LLT2);
 	}
 	else if (room_light == '3')
 	{
 		light_on(LLT3);
-		_delay_ms(100);
-		light_off(LLT3);
+		// _delay_ms(100);
+		// light_off(LLT3);
 	}
 	else if (room_light == '4')
 	{
 		light_on(LLT4);
-		_delay_ms(100);
-		light_off(LLT4);
+		// _delay_ms(100);
+		// light_off(LLT4);
 	}
 	else if (room_light == '5')
 	{
 		light_on(SECURITY);
-		_delay_ms(100);
-		light_off(SECURITY);
+		// _delay_ms(100);
+		// light_off(SECURITY);
 	}
 	
 	
@@ -219,7 +328,6 @@ char * receive_UDR_string()
 		
 		
 		while(! (UCSRA & (1<<RXC))); //wait for entire character to be received in UDR
-		
 		
 		
 		char received_char = UDR; //we shall only get the correct character if the speeds are well synchronized
@@ -244,46 +352,16 @@ char * receive_UDR_string()
 
 void register_user()
 {
+	//receive password and store it in eeprom 
+	char * username = receive_UDR_string();
+	store_username(username);
 
+	//receive username and store it in eeprom 
 	char * password = receive_UDR_string();
-	//char * username = receive_UDR_string();
-	
-	int result = strcmp(password , "august");
-	
-	if (result == 0) //D
-	{
-		light_on(LLT1);
-		_delay_ms(500);
-		
-	}
-
-	char buf[128] ; //D
-
-	get_password(buf); //D
-
-	if ( strcmp(buf , "august") == 0 ) //D
-	{
-		light_off(LLT1);
-	}
-	
 	store_password(password);
-	//store_username(username);
-
+	
 }
 
-void USART_send_array(char *array, int array_length) {
-  int i;
-  for (i = 0; i < array_length; i++) {
-    USART_send_byte(array[i]);
-  }
-}
-
-void USART_send_byte(unsigned char data) {
-  // Wait for empty transmit buffer
-  while ( !( UCSRA & (1<<UDRE)) );
-  // Put data into buffer, sends the data
-  UDR = data;
-}
 
 //sends the password and username for verification to the mobile app at login
 void login()
@@ -291,40 +369,46 @@ void login()
 	char password[PASSWORD_LENGTH];
 	char username[PASSWORD_LENGTH];
 
+	//retrieve username and password
 	get_password(password);
 	get_username(username);
 
-	// Enable transmitter
-	UCSRB |= (1 << TXEN);
 
-	//TO-DO , convert the arrays password and username into strings before sending them
-
-	//transmit both string and password
-	USART_Transmit_String(password);
+	//transmit both username and password
 	USART_Transmit_String(username);
+	USART_Transmit_String(password);
+	
 }
 
 
 //initialize micro controller
 void mcu_init()
 {
-	DDRB=0xff;
+	//PORTA OUTPUT
 	DDRA = 0xFF;//set lights port as output
-	DDRC = 0x00;//set port C as input
+
+	//PORTC INPUT
+	DDRC = 0x00;
+
+	//PORTB
+	DDRB = 0X0F;//first 4 bits are for output , last 4 bits for input
+	PORTB |= (1 << LLT1_DOOR_OPEN_BUTTON);
+	PORTB |= (1 << LLT1_DOOR_CLOSE_BUTTON);
 	
-	LIGHTS_PORT |= (1 << PIR); // Enable pull-up resistor
 	
+	//USART INIT
 	UBRRL = 0X67; //Set baud rate to 9600 for 16MHz clock 
 	UCSRC = (1 << UCSZ1) | (1 << UCSZ0) | (URSEL); // Set frame format: 8 data bits, 1 stop bit
 	UCSRB =(1<<RXEN)|(1<<TXEN)| (1 << RXCIE); //Enable serial reception and transmission
 	sei();  // Enable global interrupts
+   // UCSRA |= (1 << U2X); // Set the U2X bit in the UCSRA register to double transmission speed
 
 }
 
 //return a 1 upon detecting motion else return a 0
-int detect_motion()
+int detect_motion(int PIR_pin)
 {
-	 if(LIGHTS_SWITCH & (1 << PIR))
+	 if(PIR_PIN & (1 << PIR_pin))
         {
             return 1;
         }
@@ -338,7 +422,7 @@ int detect_motion()
 //returns 1 for low light intensity and a 0 for high intensity
 int check_light_intensity()
 {
-	if ( (LIGHTS_SWITCH & (1<<LDR)) == 1)
+	if ( (LIGHTS_SWITCH & (1<<LDR)) == 0)
 	{
 		return 1;
 	} 
@@ -402,14 +486,12 @@ void light_off(int pin)
 //store user password in EEPROM
 void store_password(char *user_password)
 {
-	sei();  // Enable global interrupts
 	eeprom_update_block((const void*)user_password, (void*)EEPROM_ADDRESS, strlen(user_password) + 1); //store password
 }
 
 //store username in EEPROM
 void store_username(char *username)
 {
-	sei();  // Enable global interrupts
 	eeprom_update_block((const void*)username, (void*)(EEPROM_ADDRESS + 128), strlen(username) + 1); //store username
 } 
 
@@ -474,6 +556,26 @@ void manual_light_switch()
 	{
 		light_off(SECURITY);
 	}
+
+}
+
+
+//turns all lights on
+void all_lights_on()
+{
+	light_on(LLT1);
+	light_on(LLT2);
+	light_on(LLT3);
+	light_on(LLT4);
+}
+
+//turns all lights off
+void all_lights_off()
+{
+	light_off(LLT1);
+	light_off(LLT2);
+	light_off(LLT3);
+	light_off(LLT4);
 }
 
 /* C CODE TO TRANSMIT STRING via UART atmega32
@@ -523,6 +625,22 @@ void USART_Transmit_String(char* string)
 		string++;
 	}
 }
+
+//SEND AN ARRAY OF CHARACTERS SERIALLY
+void USART_send_array(char *array, int array_length) {
+  int i;
+  for (i = 0; i < array_length; i++) {
+    USART_send_byte(array[i]);
+  }
+}
+
+void USART_send_byte(unsigned char data) {
+  // Wait for empty transmit buffer
+  while ( !( UCSRA & (1<<UDRE)) );
+  // Put data into buffer, sends the data
+  UDR = data;
+}
+
 
 //USE THIS TO RECEIVE A STRING 
 	/*char received_char = UDR;  // Read the received character
