@@ -3,31 +3,31 @@ light_control_system.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000046c  00000000  00000000  00000074  2**1
+  0 .text         000005f4  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000004e0  2**0
+  1 .data         00000000  00800060  00800060  00000668  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000082  00800060  00800060  000004e0  2**0
+  2 .bss          000003ea  00800060  00800060  00000668  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000004e0  2**0
+  3 .comment      00000030  00000000  00000000  00000668  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000510  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000698  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000138  00000000  00000000  00000550  2**3
+  5 .debug_aranges 00000188  00000000  00000000  000006d8  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000011e3  00000000  00000000  00000688  2**0
+  6 .debug_info   0000181a  00000000  00000000  00000860  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000794  00000000  00000000  0000186b  2**0
+  7 .debug_abbrev 000007b9  00000000  00000000  0000207a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000091c  00000000  00000000  00001fff  2**0
+  8 .debug_line   00000c03  00000000  00000000  00002833  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000208  00000000  00000000  0000291c  2**2
+  9 .debug_frame  000002f4  00000000  00000000  00003438  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000006ef  00000000  00000000  00002b24  2**0
+ 10 .debug_str    00000860  00000000  00000000  0000372c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000004ee  00000000  00000000  00003213  2**0
+ 11 .debug_loc    000009a5  00000000  00000000  00003f8c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000c8  00000000  00000000  00003701  2**0
+ 12 .debug_ranges 00000118  00000000  00000000  00004931  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -46,7 +46,7 @@ Disassembly of section .text:
   28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
-  34:	0c 94 ad 01 	jmp	0x35a	; 0x35a <__vector_13>
+  34:	0c 94 71 02 	jmp	0x4e2	; 0x4e2 <__vector_13>
   38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
   40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
@@ -64,7 +64,7 @@ Disassembly of section .text:
   5e:	cd bf       	out	0x3d, r28	; 61
 
 00000060 <__do_clear_bss>:
-  60:	20 e0       	ldi	r18, 0x00	; 0
+  60:	24 e0       	ldi	r18, 0x04	; 4
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
   66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
@@ -73,766 +73,937 @@ Disassembly of section .text:
   68:	1d 92       	st	X+, r1
 
 0000006a <.do_clear_bss_start>:
-  6a:	a2 3e       	cpi	r26, 0xE2	; 226
+  6a:	aa 34       	cpi	r26, 0x4A	; 74
   6c:	b2 07       	cpc	r27, r18
   6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
-  70:	0e 94 0e 01 	call	0x21c	; 0x21c <main>
-  74:	0c 94 34 02 	jmp	0x468	; 0x468 <_exit>
+  70:	0e 94 11 01 	call	0x222	; 0x222 <main>
+  74:	0c 94 f8 02 	jmp	0x5f0	; 0x5f0 <_exit>
 
 00000078 <__bad_interrupt>:
   78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-0000007c <_Z9open_doorii>:
-	{
-		return 0;
+0000007c <_Z8i2c_initv>:
+		_delay_ms(100);
 	}
 
 	
+
 }
-  7c:	48 b3       	in	r20, 0x18	; 24
-  7e:	21 e0       	ldi	r18, 0x01	; 1
-  80:	30 e0       	ldi	r19, 0x00	; 0
-  82:	f9 01       	movw	r30, r18
-  84:	02 c0       	rjmp	.+4      	; 0x8a <_Z9open_doorii+0xe>
-  86:	ee 0f       	add	r30, r30
-  88:	ff 1f       	adc	r31, r31
-  8a:	8a 95       	dec	r24
-  8c:	e2 f7       	brpl	.-8      	; 0x86 <_Z9open_doorii+0xa>
-  8e:	cf 01       	movw	r24, r30
-  90:	84 2b       	or	r24, r20
-  92:	88 bb       	out	0x18, r24	; 24
-  94:	88 b3       	in	r24, 0x18	; 24
-  96:	02 c0       	rjmp	.+4      	; 0x9c <_Z9open_doorii+0x20>
-  98:	22 0f       	add	r18, r18
-  9a:	33 1f       	adc	r19, r19
-  9c:	6a 95       	dec	r22
-  9e:	e2 f7       	brpl	.-8      	; 0x98 <_Z9open_doorii+0x1c>
-  a0:	20 95       	com	r18
-  a2:	28 23       	and	r18, r24
-  a4:	28 bb       	out	0x18, r18	; 24
-  a6:	08 95       	ret
+  7c:	11 b8       	out	0x01, r1	; 1
+  7e:	88 e4       	ldi	r24, 0x48	; 72
+  80:	80 b9       	out	0x00, r24	; 0
+  82:	84 e0       	ldi	r24, 0x04	; 4
+  84:	86 bf       	out	0x36, r24	; 54
+  86:	08 95       	ret
 
-000000a8 <_Z10close_doorii>:
-  a8:	98 b3       	in	r25, 0x18	; 24
-  aa:	21 e0       	ldi	r18, 0x01	; 1
-  ac:	30 e0       	ldi	r19, 0x00	; 0
-  ae:	a9 01       	movw	r20, r18
-  b0:	02 c0       	rjmp	.+4      	; 0xb6 <_Z10close_doorii+0xe>
-  b2:	44 0f       	add	r20, r20
-  b4:	55 1f       	adc	r21, r21
-  b6:	6a 95       	dec	r22
-  b8:	e2 f7       	brpl	.-8      	; 0xb2 <_Z10close_doorii+0xa>
-  ba:	49 2b       	or	r20, r25
-  bc:	48 bb       	out	0x18, r20	; 24
-  be:	98 b3       	in	r25, 0x18	; 24
-  c0:	02 c0       	rjmp	.+4      	; 0xc6 <_Z10close_doorii+0x1e>
-  c2:	22 0f       	add	r18, r18
-  c4:	33 1f       	adc	r19, r19
-  c6:	8a 95       	dec	r24
-  c8:	e2 f7       	brpl	.-8      	; 0xc2 <_Z10close_doorii+0x1a>
-  ca:	20 95       	com	r18
-  cc:	29 23       	and	r18, r25
-  ce:	28 bb       	out	0x18, r18	; 24
-  d0:	08 95       	ret
+00000088 <_Z9i2c_startv>:
+  88:	84 ea       	ldi	r24, 0xA4	; 164
+  8a:	86 bf       	out	0x36, r24	; 54
+  8c:	06 b6       	in	r0, 0x36	; 54
+  8e:	07 fe       	sbrs	r0, 7
+  90:	fd cf       	rjmp	.-6      	; 0x8c <_Z9i2c_startv+0x4>
+  92:	08 95       	ret
 
-000000d2 <_Z18receive_UDR_stringv>:
-  d2:	1f 93       	push	r17
-  d4:	cf 93       	push	r28
-  d6:	df 93       	push	r29
-  d8:	c0 e0       	ldi	r28, 0x00	; 0
-  da:	d0 e0       	ldi	r29, 0x00	; 0
-  dc:	c0 38       	cpi	r28, 0x80	; 128
-  de:	d1 05       	cpc	r29, r1
-  e0:	34 f5       	brge	.+76     	; 0x12e <_Z18receive_UDR_stringv+0x5c>
-  e2:	5f 9b       	sbis	0x0b, 7	; 11
-  e4:	fe cf       	rjmp	.-4      	; 0xe2 <_Z18receive_UDR_stringv+0x10>
-  e6:	1c b1       	in	r17, 0x0c	; 12
-  e8:	81 2f       	mov	r24, r17
-  ea:	90 e0       	ldi	r25, 0x00	; 0
-  ec:	0e 94 f7 01 	call	0x3ee	; 0x3ee <isspace>
-  f0:	89 2b       	or	r24, r25
-  f2:	71 f0       	breq	.+28     	; 0x110 <_Z18receive_UDR_stringv+0x3e>
-  f4:	e0 91 60 00 	lds	r30, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
-  f8:	f0 91 61 00 	lds	r31, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
-  fc:	ee 59       	subi	r30, 0x9E	; 158
-  fe:	ff 4f       	sbci	r31, 0xFF	; 255
- 100:	10 82       	st	Z, r1
- 102:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
- 106:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <__DATA_REGION_ORIGIN__>
- 10a:	82 e6       	ldi	r24, 0x62	; 98
- 10c:	90 e0       	ldi	r25, 0x00	; 0
- 10e:	0f c0       	rjmp	.+30     	; 0x12e <_Z18receive_UDR_stringv+0x5c>
- 110:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <__DATA_REGION_ORIGIN__>
- 114:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
- 118:	fc 01       	movw	r30, r24
- 11a:	ee 59       	subi	r30, 0x9E	; 158
- 11c:	ff 4f       	sbci	r31, 0xFF	; 255
- 11e:	10 83       	st	Z, r17
- 120:	01 96       	adiw	r24, 0x01	; 1
- 122:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <__DATA_REGION_ORIGIN__+0x1>
- 126:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <__DATA_REGION_ORIGIN__>
- 12a:	21 96       	adiw	r28, 0x01	; 1
- 12c:	d7 cf       	rjmp	.-82     	; 0xdc <_Z18receive_UDR_stringv+0xa>
- 12e:	df 91       	pop	r29
- 130:	cf 91       	pop	r28
- 132:	1f 91       	pop	r17
- 134:	08 95       	ret
+00000094 <_Z9i2c_writeh>:
+  94:	83 b9       	out	0x03, r24	; 3
+  96:	84 e8       	ldi	r24, 0x84	; 132
+  98:	86 bf       	out	0x36, r24	; 54
+  9a:	06 b6       	in	r0, 0x36	; 54
+  9c:	07 fe       	sbrs	r0, 7
+  9e:	fd cf       	rjmp	.-6      	; 0x9a <_Z9i2c_writeh+0x6>
+  a0:	08 95       	ret
 
-00000136 <_Z8mcu_initv>:
- 136:	8f ef       	ldi	r24, 0xFF	; 255
- 138:	8a bb       	out	0x1a, r24	; 26
- 13a:	14 ba       	out	0x14, r1	; 20
- 13c:	8f e0       	ldi	r24, 0x0F	; 15
- 13e:	87 bb       	out	0x17, r24	; 23
- 140:	88 b3       	in	r24, 0x18	; 24
- 142:	80 64       	ori	r24, 0x40	; 64
- 144:	88 bb       	out	0x18, r24	; 24
- 146:	88 b3       	in	r24, 0x18	; 24
- 148:	80 68       	ori	r24, 0x80	; 128
- 14a:	88 bb       	out	0x18, r24	; 24
- 14c:	87 e6       	ldi	r24, 0x67	; 103
- 14e:	89 b9       	out	0x09, r24	; 9
- 150:	87 e0       	ldi	r24, 0x07	; 7
- 152:	80 bd       	out	0x20, r24	; 32
- 154:	88 e9       	ldi	r24, 0x98	; 152
- 156:	8a b9       	out	0x0a, r24	; 10
- 158:	78 94       	sei
- 15a:	08 95       	ret
+000000a2 <_Z8i2c_readh>:
+  a2:	20 e4       	ldi	r18, 0x40	; 64
+  a4:	82 9f       	mul	r24, r18
+  a6:	c0 01       	movw	r24, r0
+  a8:	11 24       	eor	r1, r1
+  aa:	84 68       	ori	r24, 0x84	; 132
+  ac:	86 bf       	out	0x36, r24	; 54
+  ae:	06 b6       	in	r0, 0x36	; 54
+  b0:	07 fe       	sbrs	r0, 7
+  b2:	fd cf       	rjmp	.-6      	; 0xae <_Z8i2c_readh+0xc>
+  b4:	83 b1       	in	r24, 0x03	; 3
+  b6:	08 95       	ret
 
-0000015c <_Z21check_light_intensityv>:
- 15c:	9d 99       	sbic	0x13, 5	; 19
- 15e:	03 c0       	rjmp	.+6      	; 0x166 <_Z21check_light_intensityv+0xa>
+000000b8 <_Z8i2c_stopv>:
+  b8:	84 e9       	ldi	r24, 0x94	; 148
+  ba:	86 bf       	out	0x36, r24	; 54
+  bc:	80 e0       	ldi	r24, 0x00	; 0
+  be:	90 e0       	ldi	r25, 0x00	; 0
+  c0:	84 36       	cpi	r24, 0x64	; 100
+  c2:	91 05       	cpc	r25, r1
+  c4:	14 f4       	brge	.+4      	; 0xca <_Z8i2c_stopv+0x12>
+  c6:	01 96       	adiw	r24, 0x01	; 1
+  c8:	fb cf       	rjmp	.-10     	; 0xc0 <_Z8i2c_stopv+0x8>
+  ca:	08 95       	ret
+
+000000cc <_Z8rtc_initv>:
+  cc:	0e 94 3e 00 	call	0x7c	; 0x7c <_Z8i2c_initv>
+  d0:	0e 94 44 00 	call	0x88	; 0x88 <_Z9i2c_startv>
+  d4:	80 ed       	ldi	r24, 0xD0	; 208
+  d6:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+  da:	87 e0       	ldi	r24, 0x07	; 7
+  dc:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+  e0:	80 e0       	ldi	r24, 0x00	; 0
+  e2:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+  e6:	0e 94 5c 00 	call	0xb8	; 0xb8 <_Z8i2c_stopv>
+  ea:	08 95       	ret
+
+000000ec <_Z11rtc_setTimehhh>:
+  ec:	1f 93       	push	r17
+  ee:	cf 93       	push	r28
+  f0:	df 93       	push	r29
+  f2:	c8 2f       	mov	r28, r24
+  f4:	d6 2f       	mov	r29, r22
+  f6:	14 2f       	mov	r17, r20
+  f8:	0e 94 44 00 	call	0x88	; 0x88 <_Z9i2c_startv>
+  fc:	80 ed       	ldi	r24, 0xD0	; 208
+  fe:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 102:	80 e0       	ldi	r24, 0x00	; 0
+ 104:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 108:	81 2f       	mov	r24, r17
+ 10a:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 10e:	8d 2f       	mov	r24, r29
+ 110:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 114:	8c 2f       	mov	r24, r28
+ 116:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 11a:	0e 94 5c 00 	call	0xb8	; 0xb8 <_Z8i2c_stopv>
+ 11e:	df 91       	pop	r29
+ 120:	cf 91       	pop	r28
+ 122:	1f 91       	pop	r17
+ 124:	08 95       	ret
+
+00000126 <_Z11rtc_getTimePhS_S_>:
+ 126:	ef 92       	push	r14
+ 128:	ff 92       	push	r15
+ 12a:	0f 93       	push	r16
+ 12c:	1f 93       	push	r17
+ 12e:	cf 93       	push	r28
+ 130:	df 93       	push	r29
+ 132:	ec 01       	movw	r28, r24
+ 134:	8b 01       	movw	r16, r22
+ 136:	7a 01       	movw	r14, r20
+ 138:	0e 94 44 00 	call	0x88	; 0x88 <_Z9i2c_startv>
+ 13c:	80 ed       	ldi	r24, 0xD0	; 208
+ 13e:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 142:	80 e0       	ldi	r24, 0x00	; 0
+ 144:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 148:	0e 94 5c 00 	call	0xb8	; 0xb8 <_Z8i2c_stopv>
+ 14c:	0e 94 44 00 	call	0x88	; 0x88 <_Z9i2c_startv>
+ 150:	81 ed       	ldi	r24, 0xD1	; 209
+ 152:	0e 94 4a 00 	call	0x94	; 0x94 <_Z9i2c_writeh>
+ 156:	81 e0       	ldi	r24, 0x01	; 1
+ 158:	0e 94 51 00 	call	0xa2	; 0xa2 <_Z8i2c_readh>
+ 15c:	f7 01       	movw	r30, r14
+ 15e:	80 83       	st	Z, r24
  160:	81 e0       	ldi	r24, 0x01	; 1
- 162:	90 e0       	ldi	r25, 0x00	; 0
- 164:	08 95       	ret
- 166:	80 e0       	ldi	r24, 0x00	; 0
- 168:	90 e0       	ldi	r25, 0x00	; 0
- 16a:	08 95       	ret
+ 162:	0e 94 51 00 	call	0xa2	; 0xa2 <_Z8i2c_readh>
+ 166:	f8 01       	movw	r30, r16
+ 168:	80 83       	st	Z, r24
+ 16a:	80 e0       	ldi	r24, 0x00	; 0
+ 16c:	0e 94 51 00 	call	0xa2	; 0xa2 <_Z8i2c_readh>
+ 170:	88 83       	st	Y, r24
+ 172:	0e 94 5c 00 	call	0xb8	; 0xb8 <_Z8i2c_stopv>
+ 176:	df 91       	pop	r29
+ 178:	cf 91       	pop	r28
+ 17a:	1f 91       	pop	r17
+ 17c:	0f 91       	pop	r16
+ 17e:	ff 90       	pop	r15
+ 180:	ef 90       	pop	r14
+ 182:	08 95       	ret
 
-0000016c <_Z14USART_Transmith>:
+00000184 <_Z8mcu_initv>:
+ 184:	8f ef       	ldi	r24, 0xFF	; 255
+ 186:	8a bb       	out	0x1a, r24	; 26
+ 188:	8f e0       	ldi	r24, 0x0F	; 15
+ 18a:	87 bb       	out	0x17, r24	; 23
+ 18c:	88 b3       	in	r24, 0x18	; 24
+ 18e:	80 64       	ori	r24, 0x40	; 64
+ 190:	88 bb       	out	0x18, r24	; 24
+ 192:	88 b3       	in	r24, 0x18	; 24
+ 194:	80 68       	ori	r24, 0x80	; 128
+ 196:	88 bb       	out	0x18, r24	; 24
+ 198:	85 b3       	in	r24, 0x15	; 21
+ 19a:	81 60       	ori	r24, 0x01	; 1
+ 19c:	85 bb       	out	0x15, r24	; 21
+ 19e:	85 b3       	in	r24, 0x15	; 21
+ 1a0:	82 60       	ori	r24, 0x02	; 2
+ 1a2:	85 bb       	out	0x15, r24	; 21
+ 1a4:	85 b3       	in	r24, 0x15	; 21
+ 1a6:	84 60       	ori	r24, 0x04	; 4
+ 1a8:	85 bb       	out	0x15, r24	; 21
+ 1aa:	85 b3       	in	r24, 0x15	; 21
+ 1ac:	88 60       	ori	r24, 0x08	; 8
+ 1ae:	85 bb       	out	0x15, r24	; 21
+ 1b0:	85 b3       	in	r24, 0x15	; 21
+ 1b2:	80 61       	ori	r24, 0x10	; 16
+ 1b4:	85 bb       	out	0x15, r24	; 21
+ 1b6:	81 b3       	in	r24, 0x11	; 17
+ 1b8:	80 61       	ori	r24, 0x10	; 16
+ 1ba:	81 bb       	out	0x11, r24	; 17
+ 1bc:	87 e6       	ldi	r24, 0x67	; 103
+ 1be:	89 b9       	out	0x09, r24	; 9
+ 1c0:	87 e0       	ldi	r24, 0x07	; 7
+ 1c2:	80 bd       	out	0x20, r24	; 32
+ 1c4:	88 e9       	ldi	r24, 0x98	; 152
+ 1c6:	8a b9       	out	0x0a, r24	; 10
+ 1c8:	78 94       	sei
+ 1ca:	0e 94 66 00 	call	0xcc	; 0xcc <_Z8rtc_initv>
+ 1ce:	40 e5       	ldi	r20, 0x50	; 80
+ 1d0:	69 e2       	ldi	r22, 0x29	; 41
+ 1d2:	81 e2       	ldi	r24, 0x21	; 33
+ 1d4:	0e 94 76 00 	call	0xec	; 0xec <_Z11rtc_setTimehhh>
+ 1d8:	08 95       	ret
 
+000001da <_Z14USART_Transmith>:
+ 1da:	5d 9b       	sbis	0x0b, 5	; 11
+ 1dc:	fe cf       	rjmp	.-4      	; 0x1da <_Z14USART_Transmith>
+ 1de:	2f ef       	ldi	r18, 0xFF	; 255
+ 1e0:	31 ee       	ldi	r19, 0xE1	; 225
+ 1e2:	94 e0       	ldi	r25, 0x04	; 4
+ 1e4:	21 50       	subi	r18, 0x01	; 1
+ 1e6:	30 40       	sbci	r19, 0x00	; 0
+ 1e8:	90 40       	sbci	r25, 0x00	; 0
+ 1ea:	e1 f7       	brne	.-8      	; 0x1e4 <_Z14USART_Transmith+0xa>
+ 1ec:	00 c0       	rjmp	.+0      	; 0x1ee <_Z14USART_Transmith+0x14>
+ 1ee:	00 00       	nop
+ 1f0:	8c b9       	out	0x0c, r24	; 12
+ 1f2:	08 95       	ret
 
-void USART_Transmit(unsigned char data)
-{
-	// Wait for empty transmit buffer
-	while (!(UCSRA & (1 << UDRE)));
- 16c:	5d 9b       	sbis	0x0b, 5	; 11
- 16e:	fe cf       	rjmp	.-4      	; 0x16c <_Z14USART_Transmith>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+000001f4 <_Z8light_oni>:
+ 1f4:	9b b3       	in	r25, 0x1b	; 27
+ 1f6:	21 e0       	ldi	r18, 0x01	; 1
+ 1f8:	30 e0       	ldi	r19, 0x00	; 0
+ 1fa:	02 c0       	rjmp	.+4      	; 0x200 <_Z8light_oni+0xc>
+ 1fc:	22 0f       	add	r18, r18
+ 1fe:	33 1f       	adc	r19, r19
+ 200:	8a 95       	dec	r24
+ 202:	e2 f7       	brpl	.-8      	; 0x1fc <_Z8light_oni+0x8>
+ 204:	29 2b       	or	r18, r25
+ 206:	2b bb       	out	0x1b, r18	; 27
+ 208:	08 95       	ret
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 170:	2f ef       	ldi	r18, 0xFF	; 255
- 172:	31 ee       	ldi	r19, 0xE1	; 225
- 174:	94 e0       	ldi	r25, 0x04	; 4
- 176:	21 50       	subi	r18, 0x01	; 1
- 178:	30 40       	sbci	r19, 0x00	; 0
- 17a:	90 40       	sbci	r25, 0x00	; 0
- 17c:	e1 f7       	brne	.-8      	; 0x176 <_Z14USART_Transmith+0xa>
- 17e:	00 c0       	rjmp	.+0      	; 0x180 <_Z14USART_Transmith+0x14>
- 180:	00 00       	nop
+0000020a <_Z9light_offi>:
+ 20a:	9b b3       	in	r25, 0x1b	; 27
+ 20c:	21 e0       	ldi	r18, 0x01	; 1
+ 20e:	30 e0       	ldi	r19, 0x00	; 0
+ 210:	02 c0       	rjmp	.+4      	; 0x216 <_Z9light_offi+0xc>
+ 212:	22 0f       	add	r18, r18
+ 214:	33 1f       	adc	r19, r19
+ 216:	8a 95       	dec	r24
+ 218:	e2 f7       	brpl	.-8      	; 0x212 <_Z9light_offi+0x8>
+ 21a:	20 95       	com	r18
+ 21c:	29 23       	and	r18, r25
+ 21e:	2b bb       	out	0x1b, r18	; 27
+ 220:	08 95       	ret
 
-	_delay_ms(100);
-	
-	// Put data into buffer, sends the data
-	UDR = data;
- 182:	8c b9       	out	0x0c, r24	; 12
- 184:	08 95       	ret
+00000222 <main>:
+ 222:	cf 93       	push	r28
+ 224:	df 93       	push	r29
+ 226:	00 d0       	rcall	.+0      	; 0x228 <main+0x6>
+ 228:	1f 92       	push	r1
+ 22a:	cd b7       	in	r28, 0x3d	; 61
+ 22c:	de b7       	in	r29, 0x3e	; 62
+ 22e:	0e 94 c2 00 	call	0x184	; 0x184 <_Z8mcu_initv>
+ 232:	ae 01       	movw	r20, r28
+ 234:	4d 5f       	subi	r20, 0xFD	; 253
+ 236:	5f 4f       	sbci	r21, 0xFF	; 255
+ 238:	be 01       	movw	r22, r28
+ 23a:	6e 5f       	subi	r22, 0xFE	; 254
+ 23c:	7f 4f       	sbci	r23, 0xFF	; 255
+ 23e:	ce 01       	movw	r24, r28
+ 240:	01 96       	adiw	r24, 0x01	; 1
+ 242:	0e 94 93 00 	call	0x126	; 0x126 <_Z11rtc_getTimePhS_S_>
+ 246:	89 81       	ldd	r24, Y+1	; 0x01
+ 248:	90 e0       	ldi	r25, 0x00	; 0
+ 24a:	95 95       	asr	r25
+ 24c:	87 95       	ror	r24
+ 24e:	95 95       	asr	r25
+ 250:	87 95       	ror	r24
+ 252:	95 95       	asr	r25
+ 254:	87 95       	ror	r24
+ 256:	95 95       	asr	r25
+ 258:	87 95       	ror	r24
+ 25a:	ef e9       	ldi	r30, 0x9F	; 159
+ 25c:	ff e0       	ldi	r31, 0x0F	; 15
+ 25e:	31 97       	sbiw	r30, 0x01	; 1
+ 260:	f1 f7       	brne	.-4      	; 0x25e <main+0x3c>
+ 262:	00 c0       	rjmp	.+0      	; 0x264 <main+0x42>
+ 264:	00 00       	nop
+ 266:	99 81       	ldd	r25, Y+1	; 0x01
+ 268:	9f 70       	andi	r25, 0x0F	; 15
+ 26a:	2a 81       	ldd	r18, Y+2	; 0x02
+ 26c:	30 e0       	ldi	r19, 0x00	; 0
+ 26e:	35 95       	asr	r19
+ 270:	27 95       	ror	r18
+ 272:	35 95       	asr	r19
+ 274:	27 95       	ror	r18
+ 276:	35 95       	asr	r19
+ 278:	27 95       	ror	r18
+ 27a:	35 95       	asr	r19
+ 27c:	27 95       	ror	r18
+ 27e:	ef e9       	ldi	r30, 0x9F	; 159
+ 280:	ff e0       	ldi	r31, 0x0F	; 15
+ 282:	31 97       	sbiw	r30, 0x01	; 1
+ 284:	f1 f7       	brne	.-4      	; 0x282 <main+0x60>
+ 286:	00 c0       	rjmp	.+0      	; 0x288 <main+0x66>
+ 288:	00 00       	nop
+ 28a:	3a 81       	ldd	r19, Y+2	; 0x02
+ 28c:	3f 70       	andi	r19, 0x0F	; 15
+ 28e:	4b 81       	ldd	r20, Y+3	; 0x03
+ 290:	50 e0       	ldi	r21, 0x00	; 0
+ 292:	55 95       	asr	r21
+ 294:	47 95       	ror	r20
+ 296:	55 95       	asr	r21
+ 298:	47 95       	ror	r20
+ 29a:	55 95       	asr	r21
+ 29c:	47 95       	ror	r20
+ 29e:	55 95       	asr	r21
+ 2a0:	47 95       	ror	r20
+ 2a2:	ef e9       	ldi	r30, 0x9F	; 159
+ 2a4:	ff e0       	ldi	r31, 0x0F	; 15
+ 2a6:	31 97       	sbiw	r30, 0x01	; 1
+ 2a8:	f1 f7       	brne	.-4      	; 0x2a6 <main+0x84>
+ 2aa:	00 c0       	rjmp	.+0      	; 0x2ac <main+0x8a>
+ 2ac:	00 00       	nop
+ 2ae:	5b 81       	ldd	r21, Y+3	; 0x03
+ 2b0:	5f 70       	andi	r21, 0x0F	; 15
+ 2b2:	82 30       	cpi	r24, 0x02	; 2
+ 2b4:	79 f4       	brne	.+30     	; 0x2d4 <main+0xb2>
+ 2b6:	91 30       	cpi	r25, 0x01	; 1
+ 2b8:	69 f4       	brne	.+26     	; 0x2d4 <main+0xb2>
+ 2ba:	23 30       	cpi	r18, 0x03	; 3
+ 2bc:	59 f4       	brne	.+22     	; 0x2d4 <main+0xb2>
+ 2be:	31 11       	cpse	r19, r1
+ 2c0:	09 c0       	rjmp	.+18     	; 0x2d4 <main+0xb2>
+ 2c2:	41 11       	cpse	r20, r1
+ 2c4:	07 c0       	rjmp	.+14     	; 0x2d4 <main+0xb2>
+ 2c6:	51 11       	cpse	r21, r1
+ 2c8:	05 c0       	rjmp	.+10     	; 0x2d4 <main+0xb2>
+ 2ca:	80 e0       	ldi	r24, 0x00	; 0
+ 2cc:	90 e0       	ldi	r25, 0x00	; 0
+ 2ce:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 2d2:	04 c0       	rjmp	.+8      	; 0x2dc <main+0xba>
+ 2d4:	80 e0       	ldi	r24, 0x00	; 0
+ 2d6:	90 e0       	ldi	r25, 0x00	; 0
+ 2d8:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 2dc:	ff ef       	ldi	r31, 0xFF	; 255
+ 2de:	21 ee       	ldi	r18, 0xE1	; 225
+ 2e0:	84 e0       	ldi	r24, 0x04	; 4
+ 2e2:	f1 50       	subi	r31, 0x01	; 1
+ 2e4:	20 40       	sbci	r18, 0x00	; 0
+ 2e6:	80 40       	sbci	r24, 0x00	; 0
+ 2e8:	e1 f7       	brne	.-8      	; 0x2e2 <main+0xc0>
+ 2ea:	00 c0       	rjmp	.+0      	; 0x2ec <main+0xca>
+ 2ec:	00 00       	nop
+ 2ee:	a1 cf       	rjmp	.-190    	; 0x232 <main+0x10>
 
-00000186 <_Z21USART_Transmit_StringPc>:
+000002f0 <_Z18receive_UDR_stringv>:
 }
 
-void USART_Transmit_String(char* string)
-{
- 186:	cf 93       	push	r28
- 188:	df 93       	push	r29
- 18a:	ec 01       	movw	r28, r24
-	while (*string)
- 18c:	88 81       	ld	r24, Y
- 18e:	88 23       	and	r24, r24
- 190:	21 f0       	breq	.+8      	; 0x19a <_Z21USART_Transmit_StringPc+0x14>
-	{
-		USART_Transmit(*string);
- 192:	0e 94 b6 00 	call	0x16c	; 0x16c <_Z14USART_Transmith>
-		string++;
- 196:	21 96       	adiw	r28, 0x01	; 1
-	UDR = data;
-}
 
-void USART_Transmit_String(char* string)
+//function receives incoming characters from UDR to and returns the combined formed string
+char * receive_UDR_string()
 {
-	while (*string)
- 198:	f9 cf       	rjmp	.-14     	; 0x18c <_Z21USART_Transmit_StringPc+0x6>
+ 2f0:	1f 93       	push	r17
+ 2f2:	cf 93       	push	r28
+ 2f4:	df 93       	push	r29
+
+	for(int i = 0; i < 128; i++)// we don't expect to receive a string of more than 128 characters 
+ 2f6:	c0 e0       	ldi	r28, 0x00	; 0
+ 2f8:	d0 e0       	ldi	r29, 0x00	; 0
+ 2fa:	c0 38       	cpi	r28, 0x80	; 128
+ 2fc:	d1 05       	cpc	r29, r1
+ 2fe:	74 f5       	brge	.+92     	; 0x35c <_Z18receive_UDR_stringv+0x6c>
 	{
-		USART_Transmit(*string);
-		string++;
+		
+		while(! (UCSRA & (1<<RXC))); //wait for entire character to be received in UDR
+ 300:	5f 9b       	sbis	0x0b, 7	; 11
+ 302:	fe cf       	rjmp	.-4      	; 0x300 <_Z18receive_UDR_stringv+0x10>
+		
+		char received_char = UDR; //we shall only get the correct character if the speeds are well synchronized
+ 304:	1c b1       	in	r17, 0x0c	; 12
+
+	    light_on(DATA_IN_LED);
+ 306:	86 e0       	ldi	r24, 0x06	; 6
+ 308:	90 e0       	ldi	r25, 0x00	; 0
+ 30a:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+
+		if ( isspace(received_char) )
+ 30e:	81 2f       	mov	r24, r17
+ 310:	90 e0       	ldi	r25, 0x00	; 0
+ 312:	0e 94 bb 02 	call	0x576	; 0x576 <isspace>
+ 316:	89 2b       	or	r24, r25
+ 318:	91 f0       	breq	.+36     	; 0x33e <_Z18receive_UDR_stringv+0x4e>
+		{
+			rx_buffer[rx_index] = '\0';  // Add null terminator to the string
+ 31a:	e0 91 60 00 	lds	r30, 0x0060	; 0x800060 <_edata>
+ 31e:	f0 91 61 00 	lds	r31, 0x0061	; 0x800061 <_edata+0x1>
+ 322:	ee 59       	subi	r30, 0x9E	; 158
+ 324:	ff 4f       	sbci	r31, 0xFF	; 255
+ 326:	10 82       	st	Z, r1
+			rx_index = 0;  // Reset the index
+ 328:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
+ 32c:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+
+			light_off(DATA_IN_LED);
+ 330:	86 e0       	ldi	r24, 0x06	; 6
+ 332:	90 e0       	ldi	r25, 0x00	; 0
+ 334:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+			
+			return rx_buffer;
+ 338:	82 e6       	ldi	r24, 0x62	; 98
+ 33a:	90 e0       	ldi	r25, 0x00	; 0
+ 33c:	13 c0       	rjmp	.+38     	; 0x364 <_Z18receive_UDR_stringv+0x74>
+		}
+		else
+		{
+			// Otherwise, store the received character in the buffer
+			rx_buffer[rx_index] = received_char;
+ 33e:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 342:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+ 346:	fc 01       	movw	r30, r24
+ 348:	ee 59       	subi	r30, 0x9E	; 158
+ 34a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 34c:	10 83       	st	Z, r17
+			rx_index++;
+ 34e:	01 96       	adiw	r24, 0x01	; 1
+ 350:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
+ 354:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+
+//function receives incoming characters from UDR to and returns the combined formed string
+char * receive_UDR_string()
+{
+
+	for(int i = 0; i < 128; i++)// we don't expect to receive a string of more than 128 characters 
+ 358:	21 96       	adiw	r28, 0x01	; 1
+ 35a:	cf cf       	rjmp	.-98     	; 0x2fa <_Z18receive_UDR_stringv+0xa>
+			rx_index++;
+		}
+
 	}
+	
+	light_off(DATA_IN_LED);	
+ 35c:	86 e0       	ldi	r24, 0x06	; 6
+ 35e:	90 e0       	ldi	r25, 0x00	; 0
+ 360:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+	
 }
- 19a:	df 91       	pop	r29
- 19c:	cf 91       	pop	r28
- 19e:	08 95       	ret
+ 364:	df 91       	pop	r29
+ 366:	cf 91       	pop	r28
+ 368:	1f 91       	pop	r17
+ 36a:	08 95       	ret
 
-000001a0 <_Z8light_oni>:
-
-
-//switch on light connected to pin 
-void light_on(int pin)
-{
-	LIGHTS_PORT |= (1<<pin);
- 1a0:	9b b3       	in	r25, 0x1b	; 27
- 1a2:	21 e0       	ldi	r18, 0x01	; 1
- 1a4:	30 e0       	ldi	r19, 0x00	; 0
- 1a6:	02 c0       	rjmp	.+4      	; 0x1ac <_Z8light_oni+0xc>
- 1a8:	22 0f       	add	r18, r18
- 1aa:	33 1f       	adc	r19, r19
- 1ac:	8a 95       	dec	r24
- 1ae:	e2 f7       	brpl	.-8      	; 0x1a8 <_Z8light_oni+0x8>
- 1b0:	29 2b       	or	r18, r25
- 1b2:	2b bb       	out	0x1b, r18	; 27
- 1b4:	08 95       	ret
-
-000001b6 <_Z9switch_onv>:
+0000036c <_Z9switch_onv>:
 
 //function that switches on desired light using mobile app
 void switch_on()
 {
 
 	char  room_light = *(receive_UDR_string());
- 1b6:	0e 94 69 00 	call	0xd2	; 0xd2 <_Z18receive_UDR_stringv>
- 1ba:	fc 01       	movw	r30, r24
- 1bc:	80 81       	ld	r24, Z
+ 36c:	0e 94 78 01 	call	0x2f0	; 0x2f0 <_Z18receive_UDR_stringv>
+ 370:	fc 01       	movw	r30, r24
+ 372:	80 81       	ld	r24, Z
 	
 	
 	if (room_light == '1')
- 1be:	81 33       	cpi	r24, 0x31	; 49
- 1c0:	29 f4       	brne	.+10     	; 0x1cc <_Z9switch_onv+0x16>
+ 374:	81 33       	cpi	r24, 0x31	; 49
+ 376:	29 f4       	brne	.+10     	; 0x382 <_Z9switch_onv+0x16>
 	{
 		light_on(LLT1);
- 1c2:	80 e0       	ldi	r24, 0x00	; 0
- 1c4:	90 e0       	ldi	r25, 0x00	; 0
- 1c6:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 1ca:	08 95       	ret
+ 378:	80 e0       	ldi	r24, 0x00	; 0
+ 37a:	90 e0       	ldi	r25, 0x00	; 0
+ 37c:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 380:	08 95       	ret
 		// _delay_ms(100);
 		// light_off(LLT1);
 	}
 	else if (room_light == '2')
- 1cc:	82 33       	cpi	r24, 0x32	; 50
- 1ce:	29 f4       	brne	.+10     	; 0x1da <_Z9switch_onv+0x24>
+ 382:	82 33       	cpi	r24, 0x32	; 50
+ 384:	29 f4       	brne	.+10     	; 0x390 <_Z9switch_onv+0x24>
 	{
 		light_on(LLT2);
- 1d0:	81 e0       	ldi	r24, 0x01	; 1
- 1d2:	90 e0       	ldi	r25, 0x00	; 0
- 1d4:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 1d8:	08 95       	ret
+ 386:	81 e0       	ldi	r24, 0x01	; 1
+ 388:	90 e0       	ldi	r25, 0x00	; 0
+ 38a:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 38e:	08 95       	ret
 		// _delay_ms(100);
 		// light_off(LLT2);
 	}
 	else if (room_light == '3')
- 1da:	83 33       	cpi	r24, 0x33	; 51
- 1dc:	29 f4       	brne	.+10     	; 0x1e8 <_Z9switch_onv+0x32>
+ 390:	83 33       	cpi	r24, 0x33	; 51
+ 392:	29 f4       	brne	.+10     	; 0x39e <_Z9switch_onv+0x32>
 	{
 		light_on(LLT3);
- 1de:	82 e0       	ldi	r24, 0x02	; 2
- 1e0:	90 e0       	ldi	r25, 0x00	; 0
- 1e2:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 1e6:	08 95       	ret
+ 394:	82 e0       	ldi	r24, 0x02	; 2
+ 396:	90 e0       	ldi	r25, 0x00	; 0
+ 398:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 39c:	08 95       	ret
 		// _delay_ms(100);
 		// light_off(LLT3);
 	}
 	else if (room_light == '4')
- 1e8:	84 33       	cpi	r24, 0x34	; 52
- 1ea:	29 f4       	brne	.+10     	; 0x1f6 <_Z9switch_onv+0x40>
+ 39e:	84 33       	cpi	r24, 0x34	; 52
+ 3a0:	29 f4       	brne	.+10     	; 0x3ac <_Z9switch_onv+0x40>
 	{
 		light_on(LLT4);
- 1ec:	83 e0       	ldi	r24, 0x03	; 3
- 1ee:	90 e0       	ldi	r25, 0x00	; 0
- 1f0:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 1f4:	08 95       	ret
+ 3a2:	83 e0       	ldi	r24, 0x03	; 3
+ 3a4:	90 e0       	ldi	r25, 0x00	; 0
+ 3a6:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 3aa:	08 95       	ret
 		// _delay_ms(100);
 		// light_off(LLT4);
 	}
 	else if (room_light == '5')
- 1f6:	85 33       	cpi	r24, 0x35	; 53
- 1f8:	21 f4       	brne	.+8      	; 0x202 <_Z9switch_onv+0x4c>
+ 3ac:	85 33       	cpi	r24, 0x35	; 53
+ 3ae:	21 f4       	brne	.+8      	; 0x3b8 <_Z9switch_onv+0x4c>
 	{
 		light_on(SECURITY);
- 1fa:	84 e0       	ldi	r24, 0x04	; 4
- 1fc:	90 e0       	ldi	r25, 0x00	; 0
- 1fe:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 202:	08 95       	ret
+ 3b0:	84 e0       	ldi	r24, 0x04	; 4
+ 3b2:	90 e0       	ldi	r25, 0x00	; 0
+ 3b4:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+ 3b8:	08 95       	ret
 
-00000204 <_Z9light_offi>:
-}
-
-//switch on light connected to pin 
-void light_off(int pin)
-{
-	LIGHTS_PORT &= ~(1<<pin);
- 204:	9b b3       	in	r25, 0x1b	; 27
- 206:	21 e0       	ldi	r18, 0x01	; 1
- 208:	30 e0       	ldi	r19, 0x00	; 0
- 20a:	02 c0       	rjmp	.+4      	; 0x210 <_Z9light_offi+0xc>
- 20c:	22 0f       	add	r18, r18
- 20e:	33 1f       	adc	r19, r19
- 210:	8a 95       	dec	r24
- 212:	e2 f7       	brpl	.-8      	; 0x20c <_Z9light_offi+0x8>
- 214:	20 95       	com	r18
- 216:	29 23       	and	r18, r25
- 218:	2b bb       	out	0x1b, r18	; 27
- 21a:	08 95       	ret
-
-0000021c <main>:
-
-
-int main(void)
-{
-		
-	mcu_init(); //initialize microcontroller
- 21c:	0e 94 9b 00 	call	0x136	; 0x136 <_Z8mcu_initv>
-	{
-	
-		//close_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
-
-		//opening door
-		if (! ((DOOR_PIN) & (1<<LLT1_DOOR_OPEN_BUTTON)) )
- 220:	b6 99       	sbic	0x16, 6	; 22
- 222:	06 c0       	rjmp	.+12     	; 0x230 <main+0x14>
-		{
-			open_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
- 224:	61 e0       	ldi	r22, 0x01	; 1
- 226:	70 e0       	ldi	r23, 0x00	; 0
- 228:	80 e0       	ldi	r24, 0x00	; 0
- 22a:	90 e0       	ldi	r25, 0x00	; 0
- 22c:	0e 94 3e 00 	call	0x7c	; 0x7c <_Z9open_doorii>
-		// 	PORTB |= (1 << LLT1_DOOR_OPEN_BUTTON);
-		// }
-
-
-		//closing door
-		if ( !((DOOR_PIN) & (1<<LLT1_DOOR_CLOSE_BUTTON)) )
- 230:	b7 99       	sbic	0x16, 7	; 22
- 232:	06 c0       	rjmp	.+12     	; 0x240 <main+0x24>
-		{
-			close_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
- 234:	61 e0       	ldi	r22, 0x01	; 1
- 236:	70 e0       	ldi	r23, 0x00	; 0
- 238:	80 e0       	ldi	r24, 0x00	; 0
- 23a:	90 e0       	ldi	r25, 0x00	; 0
- 23c:	0e 94 54 00 	call	0xa8	; 0xa8 <_Z10close_doorii>
-		// }
-
-		
-
-		//turn on security light when low light intensity is detected
-		if(check_light_intensity())
- 240:	0e 94 ae 00 	call	0x15c	; 0x15c <_Z21check_light_intensityv>
- 244:	89 2b       	or	r24, r25
- 246:	29 f0       	breq	.+10     	; 0x252 <main+0x36>
-		{
-			light_on(SECURITY);
- 248:	84 e0       	ldi	r24, 0x04	; 4
- 24a:	90 e0       	ldi	r25, 0x00	; 0
- 24c:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
- 250:	e7 cf       	rjmp	.-50     	; 0x220 <main+0x4>
-		}
-		else
-		{
-			light_off(SECURITY);
- 252:	84 e0       	ldi	r24, 0x04	; 4
- 254:	90 e0       	ldi	r25, 0x00	; 0
- 256:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 25a:	e2 cf       	rjmp	.-60     	; 0x220 <main+0x4>
-
-0000025c <_Z10switch_offv>:
+000003ba <_Z10switch_offv>:
 
 //function that switches off desired light using mobile app
 void switch_off()
 {
 
 	char  room_light = *(receive_UDR_string());
- 25c:	0e 94 69 00 	call	0xd2	; 0xd2 <_Z18receive_UDR_stringv>
- 260:	fc 01       	movw	r30, r24
- 262:	80 81       	ld	r24, Z
+ 3ba:	0e 94 78 01 	call	0x2f0	; 0x2f0 <_Z18receive_UDR_stringv>
+ 3be:	fc 01       	movw	r30, r24
+ 3c0:	80 81       	ld	r24, Z
 	
 	if (room_light == '1')
- 264:	81 33       	cpi	r24, 0x31	; 49
- 266:	29 f4       	brne	.+10     	; 0x272 <_Z10switch_offv+0x16>
+ 3c2:	81 33       	cpi	r24, 0x31	; 49
+ 3c4:	29 f4       	brne	.+10     	; 0x3d0 <_Z10switch_offv+0x16>
 	{
 		light_off(LLT1);
- 268:	80 e0       	ldi	r24, 0x00	; 0
- 26a:	90 e0       	ldi	r25, 0x00	; 0
- 26c:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 270:	08 95       	ret
+ 3c6:	80 e0       	ldi	r24, 0x00	; 0
+ 3c8:	90 e0       	ldi	r25, 0x00	; 0
+ 3ca:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 3ce:	08 95       	ret
 	}
 	else if (room_light == '2')
- 272:	82 33       	cpi	r24, 0x32	; 50
- 274:	29 f4       	brne	.+10     	; 0x280 <_Z10switch_offv+0x24>
+ 3d0:	82 33       	cpi	r24, 0x32	; 50
+ 3d2:	29 f4       	brne	.+10     	; 0x3de <_Z10switch_offv+0x24>
 	{
 		light_off(LLT2);
- 276:	81 e0       	ldi	r24, 0x01	; 1
- 278:	90 e0       	ldi	r25, 0x00	; 0
- 27a:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 27e:	08 95       	ret
+ 3d4:	81 e0       	ldi	r24, 0x01	; 1
+ 3d6:	90 e0       	ldi	r25, 0x00	; 0
+ 3d8:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 3dc:	08 95       	ret
 	}
 	else if (room_light == '3')
- 280:	83 33       	cpi	r24, 0x33	; 51
- 282:	29 f4       	brne	.+10     	; 0x28e <_Z10switch_offv+0x32>
+ 3de:	83 33       	cpi	r24, 0x33	; 51
+ 3e0:	29 f4       	brne	.+10     	; 0x3ec <_Z10switch_offv+0x32>
 	{
 		light_off(LLT3);
- 284:	82 e0       	ldi	r24, 0x02	; 2
- 286:	90 e0       	ldi	r25, 0x00	; 0
- 288:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 28c:	08 95       	ret
+ 3e2:	82 e0       	ldi	r24, 0x02	; 2
+ 3e4:	90 e0       	ldi	r25, 0x00	; 0
+ 3e6:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 3ea:	08 95       	ret
 	}
 	else if (room_light == '4')
- 28e:	84 33       	cpi	r24, 0x34	; 52
- 290:	29 f4       	brne	.+10     	; 0x29c <_Z10switch_offv+0x40>
+ 3ec:	84 33       	cpi	r24, 0x34	; 52
+ 3ee:	29 f4       	brne	.+10     	; 0x3fa <_Z10switch_offv+0x40>
 	{
 		light_off(LLT4);
- 292:	83 e0       	ldi	r24, 0x03	; 3
- 294:	90 e0       	ldi	r25, 0x00	; 0
- 296:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 29a:	08 95       	ret
+ 3f0:	83 e0       	ldi	r24, 0x03	; 3
+ 3f2:	90 e0       	ldi	r25, 0x00	; 0
+ 3f4:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 3f8:	08 95       	ret
 	}
 	else if (room_light == '5')
- 29c:	85 33       	cpi	r24, 0x35	; 53
- 29e:	21 f4       	brne	.+8      	; 0x2a8 <_Z10switch_offv+0x4c>
+ 3fa:	85 33       	cpi	r24, 0x35	; 53
+ 3fc:	21 f4       	brne	.+8      	; 0x406 <__EEPROM_REGION_LENGTH__+0x6>
 	{
 		light_off(SECURITY);
- 2a0:	84 e0       	ldi	r24, 0x04	; 4
- 2a2:	90 e0       	ldi	r25, 0x00	; 0
- 2a4:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
- 2a8:	08 95       	ret
+ 3fe:	84 e0       	ldi	r24, 0x04	; 4
+ 400:	90 e0       	ldi	r25, 0x00	; 0
+ 402:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+ 406:	08 95       	ret
 
-000002aa <_Z14store_passwordPc>:
+00000408 <_Z21USART_Transmit_StringPc>:
+
+	
+}
+
+void USART_Transmit_String(char* string)
+{
+ 408:	cf 93       	push	r28
+ 40a:	df 93       	push	r29
+ 40c:	ec 01       	movw	r28, r24
+	while (*string)
+ 40e:	88 81       	ld	r24, Y
+ 410:	88 23       	and	r24, r24
+ 412:	61 f0       	breq	.+24     	; 0x42c <_Z21USART_Transmit_StringPc+0x24>
+	{
+		light_on(DATA_OUT_LED);
+ 414:	87 e0       	ldi	r24, 0x07	; 7
+ 416:	90 e0       	ldi	r25, 0x00	; 0
+ 418:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
+
+		USART_Transmit(*string);
+ 41c:	89 91       	ld	r24, Y+
+ 41e:	0e 94 ed 00 	call	0x1da	; 0x1da <_Z14USART_Transmith>
+
+		light_off(DATA_OUT_LED);
+ 422:	87 e0       	ldi	r24, 0x07	; 7
+ 424:	90 e0       	ldi	r25, 0x00	; 0
+ 426:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
+	
+}
+
+void USART_Transmit_String(char* string)
+{
+	while (*string)
+ 42a:	f1 cf       	rjmp	.-30     	; 0x40e <_Z21USART_Transmit_StringPc+0x6>
+		light_off(DATA_OUT_LED);
+
+		string++;
+	}
+	
+}
+ 42c:	df 91       	pop	r29
+ 42e:	cf 91       	pop	r28
+ 430:	08 95       	ret
+
+00000432 <_Z14store_passwordPc>:
 
 
 //store user password in EEPROM
 void store_password(char *user_password)
 {
 	eeprom_update_block((const void*)user_password, (void*)EEPROM_ADDRESS, strlen(user_password) + 1); //store password
- 2aa:	fc 01       	movw	r30, r24
- 2ac:	01 90       	ld	r0, Z+
- 2ae:	00 20       	and	r0, r0
- 2b0:	e9 f7       	brne	.-6      	; 0x2ac <_Z14store_passwordPc+0x2>
- 2b2:	31 97       	sbiw	r30, 0x01	; 1
- 2b4:	af 01       	movw	r20, r30
- 2b6:	48 1b       	sub	r20, r24
- 2b8:	59 0b       	sbc	r21, r25
- 2ba:	4f 5f       	subi	r20, 0xFF	; 255
- 2bc:	5f 4f       	sbci	r21, 0xFF	; 255
- 2be:	60 e0       	ldi	r22, 0x00	; 0
- 2c0:	70 e0       	ldi	r23, 0x00	; 0
- 2c2:	0e 94 13 02 	call	0x426	; 0x426 <eeprom_update_block>
- 2c6:	08 95       	ret
+ 432:	fc 01       	movw	r30, r24
+ 434:	01 90       	ld	r0, Z+
+ 436:	00 20       	and	r0, r0
+ 438:	e9 f7       	brne	.-6      	; 0x434 <_Z14store_passwordPc+0x2>
+ 43a:	31 97       	sbiw	r30, 0x01	; 1
+ 43c:	af 01       	movw	r20, r30
+ 43e:	48 1b       	sub	r20, r24
+ 440:	59 0b       	sbc	r21, r25
+ 442:	4f 5f       	subi	r20, 0xFF	; 255
+ 444:	5f 4f       	sbci	r21, 0xFF	; 255
+ 446:	60 e0       	ldi	r22, 0x00	; 0
+ 448:	70 e0       	ldi	r23, 0x00	; 0
+ 44a:	0e 94 d7 02 	call	0x5ae	; 0x5ae <eeprom_update_block>
+ 44e:	08 95       	ret
 
-000002c8 <_Z14store_usernamePc>:
+00000450 <_Z14store_usernamePc>:
 }
 
 //store username in EEPROM
 void store_username(char *username)
 {
 	eeprom_update_block((const void*)username, (void*)(EEPROM_ADDRESS + 128), strlen(username) + 1); //store username
- 2c8:	fc 01       	movw	r30, r24
- 2ca:	01 90       	ld	r0, Z+
- 2cc:	00 20       	and	r0, r0
- 2ce:	e9 f7       	brne	.-6      	; 0x2ca <_Z14store_usernamePc+0x2>
- 2d0:	31 97       	sbiw	r30, 0x01	; 1
- 2d2:	af 01       	movw	r20, r30
- 2d4:	48 1b       	sub	r20, r24
- 2d6:	59 0b       	sbc	r21, r25
- 2d8:	4f 5f       	subi	r20, 0xFF	; 255
- 2da:	5f 4f       	sbci	r21, 0xFF	; 255
- 2dc:	60 e8       	ldi	r22, 0x80	; 128
- 2de:	70 e0       	ldi	r23, 0x00	; 0
- 2e0:	0e 94 13 02 	call	0x426	; 0x426 <eeprom_update_block>
- 2e4:	08 95       	ret
+ 450:	fc 01       	movw	r30, r24
+ 452:	01 90       	ld	r0, Z+
+ 454:	00 20       	and	r0, r0
+ 456:	e9 f7       	brne	.-6      	; 0x452 <_Z14store_usernamePc+0x2>
+ 458:	31 97       	sbiw	r30, 0x01	; 1
+ 45a:	af 01       	movw	r20, r30
+ 45c:	48 1b       	sub	r20, r24
+ 45e:	59 0b       	sbc	r21, r25
+ 460:	4f 5f       	subi	r20, 0xFF	; 255
+ 462:	5f 4f       	sbci	r21, 0xFF	; 255
+ 464:	60 e8       	ldi	r22, 0x80	; 128
+ 466:	70 e0       	ldi	r23, 0x00	; 0
+ 468:	0e 94 d7 02 	call	0x5ae	; 0x5ae <eeprom_update_block>
+ 46c:	08 95       	ret
 
-000002e6 <_Z13register_userv>:
+0000046e <_Z13register_userv>:
 }
 
 void register_user()
 {
 	//receive password and store it in eeprom 
 	char * username = receive_UDR_string();
- 2e6:	0e 94 69 00 	call	0xd2	; 0xd2 <_Z18receive_UDR_stringv>
+ 46e:	0e 94 78 01 	call	0x2f0	; 0x2f0 <_Z18receive_UDR_stringv>
 	store_username(username);
- 2ea:	0e 94 64 01 	call	0x2c8	; 0x2c8 <_Z14store_usernamePc>
+ 472:	0e 94 28 02 	call	0x450	; 0x450 <_Z14store_usernamePc>
 
 	//receive username and store it in eeprom 
 	char * password = receive_UDR_string();
- 2ee:	0e 94 69 00 	call	0xd2	; 0xd2 <_Z18receive_UDR_stringv>
+ 476:	0e 94 78 01 	call	0x2f0	; 0x2f0 <_Z18receive_UDR_stringv>
 	store_password(password);
- 2f2:	0e 94 55 01 	call	0x2aa	; 0x2aa <_Z14store_passwordPc>
- 2f6:	08 95       	ret
+ 47a:	0e 94 19 02 	call	0x432	; 0x432 <_Z14store_passwordPc>
+ 47e:	08 95       	ret
 
-000002f8 <_Z12get_passwordPc>:
+00000480 <_Z12get_passwordPc>:
 } 
 
 //retrieve user password from EEPROM
 void get_password(char password[PASSWORD_LENGTH])
 {
 	eeprom_read_block((void*)password, (const void*)EEPROM_ADDRESS, PASSWORD_LENGTH);
- 2f8:	44 e1       	ldi	r20, 0x14	; 20
- 2fa:	50 e0       	ldi	r21, 0x00	; 0
- 2fc:	60 e0       	ldi	r22, 0x00	; 0
- 2fe:	70 e0       	ldi	r23, 0x00	; 0
- 300:	0e 94 03 02 	call	0x406	; 0x406 <eeprom_read_block>
- 304:	08 95       	ret
+ 480:	44 e1       	ldi	r20, 0x14	; 20
+ 482:	50 e0       	ldi	r21, 0x00	; 0
+ 484:	60 e0       	ldi	r22, 0x00	; 0
+ 486:	70 e0       	ldi	r23, 0x00	; 0
+ 488:	0e 94 c7 02 	call	0x58e	; 0x58e <eeprom_read_block>
+ 48c:	08 95       	ret
 
-00000306 <_Z12get_usernamePc>:
+0000048e <_Z12get_usernamePc>:
 }
 
 //retrieve username from EEPROM
 void get_username(char username[PASSWORD_LENGTH])
 {
 	eeprom_read_block((void*)username, (const void*)(EEPROM_ADDRESS + 128), PASSWORD_LENGTH);
- 306:	44 e1       	ldi	r20, 0x14	; 20
- 308:	50 e0       	ldi	r21, 0x00	; 0
- 30a:	60 e8       	ldi	r22, 0x80	; 128
- 30c:	70 e0       	ldi	r23, 0x00	; 0
- 30e:	0e 94 03 02 	call	0x406	; 0x406 <eeprom_read_block>
- 312:	08 95       	ret
+ 48e:	44 e1       	ldi	r20, 0x14	; 20
+ 490:	50 e0       	ldi	r21, 0x00	; 0
+ 492:	60 e8       	ldi	r22, 0x80	; 128
+ 494:	70 e0       	ldi	r23, 0x00	; 0
+ 496:	0e 94 c7 02 	call	0x58e	; 0x58e <eeprom_read_block>
+ 49a:	08 95       	ret
 
-00000314 <_Z5loginv>:
+0000049c <_Z5loginv>:
 }
 
 
 //sends the password and username for verification to the mobile app at login
 void login()
 {
- 314:	cf 93       	push	r28
- 316:	df 93       	push	r29
- 318:	cd b7       	in	r28, 0x3d	; 61
- 31a:	de b7       	in	r29, 0x3e	; 62
- 31c:	a8 97       	sbiw	r28, 0x28	; 40
- 31e:	0f b6       	in	r0, 0x3f	; 63
- 320:	f8 94       	cli
- 322:	de bf       	out	0x3e, r29	; 62
- 324:	0f be       	out	0x3f, r0	; 63
- 326:	cd bf       	out	0x3d, r28	; 61
+ 49c:	cf 93       	push	r28
+ 49e:	df 93       	push	r29
+ 4a0:	cd b7       	in	r28, 0x3d	; 61
+ 4a2:	de b7       	in	r29, 0x3e	; 62
+ 4a4:	a8 97       	sbiw	r28, 0x28	; 40
+ 4a6:	0f b6       	in	r0, 0x3f	; 63
+ 4a8:	f8 94       	cli
+ 4aa:	de bf       	out	0x3e, r29	; 62
+ 4ac:	0f be       	out	0x3f, r0	; 63
+ 4ae:	cd bf       	out	0x3d, r28	; 61
 	char password[PASSWORD_LENGTH];
 	char username[PASSWORD_LENGTH];
 
 	//retrieve username and password
 	get_password(password);
- 328:	ce 01       	movw	r24, r28
- 32a:	01 96       	adiw	r24, 0x01	; 1
- 32c:	0e 94 7c 01 	call	0x2f8	; 0x2f8 <_Z12get_passwordPc>
+ 4b0:	ce 01       	movw	r24, r28
+ 4b2:	01 96       	adiw	r24, 0x01	; 1
+ 4b4:	0e 94 40 02 	call	0x480	; 0x480 <_Z12get_passwordPc>
 	get_username(username);
- 330:	ce 01       	movw	r24, r28
- 332:	45 96       	adiw	r24, 0x15	; 21
- 334:	0e 94 83 01 	call	0x306	; 0x306 <_Z12get_usernamePc>
+ 4b8:	ce 01       	movw	r24, r28
+ 4ba:	45 96       	adiw	r24, 0x15	; 21
+ 4bc:	0e 94 47 02 	call	0x48e	; 0x48e <_Z12get_usernamePc>
 
 
 	//transmit both username and password
 	USART_Transmit_String(username);
- 338:	ce 01       	movw	r24, r28
- 33a:	45 96       	adiw	r24, 0x15	; 21
- 33c:	0e 94 c3 00 	call	0x186	; 0x186 <_Z21USART_Transmit_StringPc>
+ 4c0:	ce 01       	movw	r24, r28
+ 4c2:	45 96       	adiw	r24, 0x15	; 21
+ 4c4:	0e 94 04 02 	call	0x408	; 0x408 <_Z21USART_Transmit_StringPc>
 	USART_Transmit_String(password);
- 340:	ce 01       	movw	r24, r28
- 342:	01 96       	adiw	r24, 0x01	; 1
- 344:	0e 94 c3 00 	call	0x186	; 0x186 <_Z21USART_Transmit_StringPc>
+ 4c8:	ce 01       	movw	r24, r28
+ 4ca:	01 96       	adiw	r24, 0x01	; 1
+ 4cc:	0e 94 04 02 	call	0x408	; 0x408 <_Z21USART_Transmit_StringPc>
 	
 }
- 348:	a8 96       	adiw	r28, 0x28	; 40
- 34a:	0f b6       	in	r0, 0x3f	; 63
- 34c:	f8 94       	cli
- 34e:	de bf       	out	0x3e, r29	; 62
- 350:	0f be       	out	0x3f, r0	; 63
- 352:	cd bf       	out	0x3d, r28	; 61
- 354:	df 91       	pop	r29
- 356:	cf 91       	pop	r28
- 358:	08 95       	ret
+ 4d0:	a8 96       	adiw	r28, 0x28	; 40
+ 4d2:	0f b6       	in	r0, 0x3f	; 63
+ 4d4:	f8 94       	cli
+ 4d6:	de bf       	out	0x3e, r29	; 62
+ 4d8:	0f be       	out	0x3f, r0	; 63
+ 4da:	cd bf       	out	0x3d, r28	; 61
+ 4dc:	df 91       	pop	r29
+ 4de:	cf 91       	pop	r28
+ 4e0:	08 95       	ret
 
-0000035a <__vector_13>:
-		}
+000004e2 <__vector_13>:
+		// }
 	}
 }
 
 
 ISR(USART_RXC_vect) {
- 35a:	1f 92       	push	r1
- 35c:	0f 92       	push	r0
- 35e:	0f b6       	in	r0, 0x3f	; 63
- 360:	0f 92       	push	r0
- 362:	11 24       	eor	r1, r1
- 364:	2f 93       	push	r18
- 366:	3f 93       	push	r19
- 368:	4f 93       	push	r20
- 36a:	5f 93       	push	r21
- 36c:	6f 93       	push	r22
- 36e:	7f 93       	push	r23
- 370:	8f 93       	push	r24
- 372:	9f 93       	push	r25
- 374:	af 93       	push	r26
- 376:	bf 93       	push	r27
- 378:	ef 93       	push	r30
- 37a:	ff 93       	push	r31
+ 4e2:	1f 92       	push	r1
+ 4e4:	0f 92       	push	r0
+ 4e6:	0f b6       	in	r0, 0x3f	; 63
+ 4e8:	0f 92       	push	r0
+ 4ea:	11 24       	eor	r1, r1
+ 4ec:	2f 93       	push	r18
+ 4ee:	3f 93       	push	r19
+ 4f0:	4f 93       	push	r20
+ 4f2:	5f 93       	push	r21
+ 4f4:	6f 93       	push	r22
+ 4f6:	7f 93       	push	r23
+ 4f8:	8f 93       	push	r24
+ 4fa:	9f 93       	push	r25
+ 4fc:	af 93       	push	r26
+ 4fe:	bf 93       	push	r27
+ 500:	ef 93       	push	r30
+ 502:	ff 93       	push	r31
 	
 	light_on(APP_LED);
- 37c:	85 e0       	ldi	r24, 0x05	; 5
- 37e:	90 e0       	ldi	r25, 0x00	; 0
- 380:	0e 94 d0 00 	call	0x1a0	; 0x1a0 <_Z8light_oni>
+ 504:	85 e0       	ldi	r24, 0x05	; 5
+ 506:	90 e0       	ldi	r25, 0x00	; 0
+ 508:	0e 94 fa 00 	call	0x1f4	; 0x1f4 <_Z8light_oni>
 	
 	
 	char flag = UDR;  // Read the received character
- 384:	8c b1       	in	r24, 0x0c	; 12
+ 50c:	8c b1       	in	r24, 0x0c	; 12
 	
 	
 
 	switch (flag)
- 386:	8c 34       	cpi	r24, 0x4C	; 76
- 388:	49 f0       	breq	.+18     	; 0x39c <__vector_13+0x42>
- 38a:	18 f4       	brcc	.+6      	; 0x392 <__vector_13+0x38>
- 38c:	86 34       	cpi	r24, 0x46	; 70
- 38e:	79 f0       	breq	.+30     	; 0x3ae <__vector_13+0x54>
- 390:	10 c0       	rjmp	.+32     	; 0x3b2 <__vector_13+0x58>
- 392:	8f 34       	cpi	r24, 0x4F	; 79
- 394:	49 f0       	breq	.+18     	; 0x3a8 <__vector_13+0x4e>
- 396:	82 35       	cpi	r24, 0x52	; 82
- 398:	21 f0       	breq	.+8      	; 0x3a2 <__vector_13+0x48>
- 39a:	0b c0       	rjmp	.+22     	; 0x3b2 <__vector_13+0x58>
+ 50e:	8c 34       	cpi	r24, 0x4C	; 76
+ 510:	49 f0       	breq	.+18     	; 0x524 <__vector_13+0x42>
+ 512:	18 f4       	brcc	.+6      	; 0x51a <__vector_13+0x38>
+ 514:	86 34       	cpi	r24, 0x46	; 70
+ 516:	79 f0       	breq	.+30     	; 0x536 <__vector_13+0x54>
+ 518:	10 c0       	rjmp	.+32     	; 0x53a <__vector_13+0x58>
+ 51a:	8f 34       	cpi	r24, 0x4F	; 79
+ 51c:	49 f0       	breq	.+18     	; 0x530 <__vector_13+0x4e>
+ 51e:	82 35       	cpi	r24, 0x52	; 82
+ 520:	21 f0       	breq	.+8      	; 0x52a <__vector_13+0x48>
+ 522:	0b c0       	rjmp	.+22     	; 0x53a <__vector_13+0x58>
 	{
 	case 'L': //login user 
 		login();
- 39c:	0e 94 8a 01 	call	0x314	; 0x314 <_Z5loginv>
+ 524:	0e 94 4e 02 	call	0x49c	; 0x49c <_Z5loginv>
 		break;
- 3a0:	08 c0       	rjmp	.+16     	; 0x3b2 <__vector_13+0x58>
+ 528:	08 c0       	rjmp	.+16     	; 0x53a <__vector_13+0x58>
 	
 	case 'R': //register user
 		register_user();
- 3a2:	0e 94 73 01 	call	0x2e6	; 0x2e6 <_Z13register_userv>
+ 52a:	0e 94 37 02 	call	0x46e	; 0x46e <_Z13register_userv>
 		break;
- 3a6:	05 c0       	rjmp	.+10     	; 0x3b2 <__vector_13+0x58>
+ 52e:	05 c0       	rjmp	.+10     	; 0x53a <__vector_13+0x58>
 
 	case 'O': //switch on light
 		switch_on();
- 3a8:	0e 94 db 00 	call	0x1b6	; 0x1b6 <_Z9switch_onv>
+ 530:	0e 94 b6 01 	call	0x36c	; 0x36c <_Z9switch_onv>
 		break;
- 3ac:	02 c0       	rjmp	.+4      	; 0x3b2 <__vector_13+0x58>
+ 534:	02 c0       	rjmp	.+4      	; 0x53a <__vector_13+0x58>
 
 	case 'F': //switch off light
 		switch_off();
- 3ae:	0e 94 2e 01 	call	0x25c	; 0x25c <_Z10switch_offv>
- 3b2:	2f ef       	ldi	r18, 0xFF	; 255
- 3b4:	81 ee       	ldi	r24, 0xE1	; 225
- 3b6:	94 e0       	ldi	r25, 0x04	; 4
- 3b8:	21 50       	subi	r18, 0x01	; 1
- 3ba:	80 40       	sbci	r24, 0x00	; 0
- 3bc:	90 40       	sbci	r25, 0x00	; 0
- 3be:	e1 f7       	brne	.-8      	; 0x3b8 <__vector_13+0x5e>
- 3c0:	00 c0       	rjmp	.+0      	; 0x3c2 <__vector_13+0x68>
- 3c2:	00 00       	nop
+ 536:	0e 94 dd 01 	call	0x3ba	; 0x3ba <_Z10switch_offv>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 53a:	2f ef       	ldi	r18, 0xFF	; 255
+ 53c:	81 ee       	ldi	r24, 0xE1	; 225
+ 53e:	94 e0       	ldi	r25, 0x04	; 4
+ 540:	21 50       	subi	r18, 0x01	; 1
+ 542:	80 40       	sbci	r24, 0x00	; 0
+ 544:	90 40       	sbci	r25, 0x00	; 0
+ 546:	e1 f7       	brne	.-8      	; 0x540 <__vector_13+0x5e>
+ 548:	00 c0       	rjmp	.+0      	; 0x54a <__vector_13+0x68>
+ 54a:	00 00       	nop
 		break;
 	}
 	
 	_delay_ms(100);
 
 	light_off(APP_LED);
- 3c4:	85 e0       	ldi	r24, 0x05	; 5
- 3c6:	90 e0       	ldi	r25, 0x00	; 0
- 3c8:	0e 94 02 01 	call	0x204	; 0x204 <_Z9light_offi>
+ 54c:	85 e0       	ldi	r24, 0x05	; 5
+ 54e:	90 e0       	ldi	r25, 0x00	; 0
+ 550:	0e 94 05 01 	call	0x20a	; 0x20a <_Z9light_offi>
 	
 }
- 3cc:	ff 91       	pop	r31
- 3ce:	ef 91       	pop	r30
- 3d0:	bf 91       	pop	r27
- 3d2:	af 91       	pop	r26
- 3d4:	9f 91       	pop	r25
- 3d6:	8f 91       	pop	r24
- 3d8:	7f 91       	pop	r23
- 3da:	6f 91       	pop	r22
- 3dc:	5f 91       	pop	r21
- 3de:	4f 91       	pop	r20
- 3e0:	3f 91       	pop	r19
- 3e2:	2f 91       	pop	r18
- 3e4:	0f 90       	pop	r0
- 3e6:	0f be       	out	0x3f, r0	; 63
- 3e8:	0f 90       	pop	r0
- 3ea:	1f 90       	pop	r1
- 3ec:	18 95       	reti
+ 554:	ff 91       	pop	r31
+ 556:	ef 91       	pop	r30
+ 558:	bf 91       	pop	r27
+ 55a:	af 91       	pop	r26
+ 55c:	9f 91       	pop	r25
+ 55e:	8f 91       	pop	r24
+ 560:	7f 91       	pop	r23
+ 562:	6f 91       	pop	r22
+ 564:	5f 91       	pop	r21
+ 566:	4f 91       	pop	r20
+ 568:	3f 91       	pop	r19
+ 56a:	2f 91       	pop	r18
+ 56c:	0f 90       	pop	r0
+ 56e:	0f be       	out	0x3f, r0	; 63
+ 570:	0f 90       	pop	r0
+ 572:	1f 90       	pop	r1
+ 574:	18 95       	reti
 
-000003ee <isspace>:
- 3ee:	91 11       	cpse	r25, r1
- 3f0:	0c 94 00 02 	jmp	0x400	; 0x400 <__ctype_isfalse>
- 3f4:	80 32       	cpi	r24, 0x20	; 32
- 3f6:	19 f0       	breq	.+6      	; 0x3fe <isspace+0x10>
- 3f8:	89 50       	subi	r24, 0x09	; 9
- 3fa:	85 50       	subi	r24, 0x05	; 5
- 3fc:	c8 f7       	brcc	.-14     	; 0x3f0 <isspace+0x2>
- 3fe:	08 95       	ret
+00000576 <isspace>:
+ 576:	91 11       	cpse	r25, r1
+ 578:	0c 94 c4 02 	jmp	0x588	; 0x588 <__ctype_isfalse>
+ 57c:	80 32       	cpi	r24, 0x20	; 32
+ 57e:	19 f0       	breq	.+6      	; 0x586 <isspace+0x10>
+ 580:	89 50       	subi	r24, 0x09	; 9
+ 582:	85 50       	subi	r24, 0x05	; 5
+ 584:	c8 f7       	brcc	.-14     	; 0x578 <isspace+0x2>
+ 586:	08 95       	ret
 
-00000400 <__ctype_isfalse>:
- 400:	99 27       	eor	r25, r25
- 402:	88 27       	eor	r24, r24
+00000588 <__ctype_isfalse>:
+ 588:	99 27       	eor	r25, r25
+ 58a:	88 27       	eor	r24, r24
 
-00000404 <__ctype_istrue>:
- 404:	08 95       	ret
+0000058c <__ctype_istrue>:
+ 58c:	08 95       	ret
 
-00000406 <eeprom_read_block>:
- 406:	dc 01       	movw	r26, r24
- 408:	cb 01       	movw	r24, r22
+0000058e <eeprom_read_block>:
+ 58e:	dc 01       	movw	r26, r24
+ 590:	cb 01       	movw	r24, r22
 
-0000040a <eeprom_read_blraw>:
- 40a:	fc 01       	movw	r30, r24
- 40c:	e1 99       	sbic	0x1c, 1	; 28
- 40e:	fe cf       	rjmp	.-4      	; 0x40c <eeprom_read_blraw+0x2>
- 410:	06 c0       	rjmp	.+12     	; 0x41e <eeprom_read_blraw+0x14>
- 412:	ff bb       	out	0x1f, r31	; 31
- 414:	ee bb       	out	0x1e, r30	; 30
- 416:	e0 9a       	sbi	0x1c, 0	; 28
- 418:	31 96       	adiw	r30, 0x01	; 1
- 41a:	0d b2       	in	r0, 0x1d	; 29
- 41c:	0d 92       	st	X+, r0
- 41e:	41 50       	subi	r20, 0x01	; 1
- 420:	50 40       	sbci	r21, 0x00	; 0
- 422:	b8 f7       	brcc	.-18     	; 0x412 <eeprom_read_blraw+0x8>
- 424:	08 95       	ret
+00000592 <eeprom_read_blraw>:
+ 592:	fc 01       	movw	r30, r24
+ 594:	e1 99       	sbic	0x1c, 1	; 28
+ 596:	fe cf       	rjmp	.-4      	; 0x594 <eeprom_read_blraw+0x2>
+ 598:	06 c0       	rjmp	.+12     	; 0x5a6 <eeprom_read_blraw+0x14>
+ 59a:	ff bb       	out	0x1f, r31	; 31
+ 59c:	ee bb       	out	0x1e, r30	; 30
+ 59e:	e0 9a       	sbi	0x1c, 0	; 28
+ 5a0:	31 96       	adiw	r30, 0x01	; 1
+ 5a2:	0d b2       	in	r0, 0x1d	; 29
+ 5a4:	0d 92       	st	X+, r0
+ 5a6:	41 50       	subi	r20, 0x01	; 1
+ 5a8:	50 40       	sbci	r21, 0x00	; 0
+ 5aa:	b8 f7       	brcc	.-18     	; 0x59a <eeprom_read_blraw+0x8>
+ 5ac:	08 95       	ret
 
-00000426 <eeprom_update_block>:
- 426:	dc 01       	movw	r26, r24
- 428:	a4 0f       	add	r26, r20
- 42a:	b5 1f       	adc	r27, r21
- 42c:	41 50       	subi	r20, 0x01	; 1
- 42e:	50 40       	sbci	r21, 0x00	; 0
- 430:	48 f0       	brcs	.+18     	; 0x444 <eeprom_update_block+0x1e>
- 432:	cb 01       	movw	r24, r22
- 434:	84 0f       	add	r24, r20
- 436:	95 1f       	adc	r25, r21
- 438:	2e 91       	ld	r18, -X
- 43a:	0e 94 24 02 	call	0x448	; 0x448 <eeprom_update_r18>
- 43e:	41 50       	subi	r20, 0x01	; 1
- 440:	50 40       	sbci	r21, 0x00	; 0
- 442:	d0 f7       	brcc	.-12     	; 0x438 <eeprom_update_block+0x12>
- 444:	08 95       	ret
+000005ae <eeprom_update_block>:
+ 5ae:	dc 01       	movw	r26, r24
+ 5b0:	a4 0f       	add	r26, r20
+ 5b2:	b5 1f       	adc	r27, r21
+ 5b4:	41 50       	subi	r20, 0x01	; 1
+ 5b6:	50 40       	sbci	r21, 0x00	; 0
+ 5b8:	48 f0       	brcs	.+18     	; 0x5cc <eeprom_update_block+0x1e>
+ 5ba:	cb 01       	movw	r24, r22
+ 5bc:	84 0f       	add	r24, r20
+ 5be:	95 1f       	adc	r25, r21
+ 5c0:	2e 91       	ld	r18, -X
+ 5c2:	0e 94 e8 02 	call	0x5d0	; 0x5d0 <eeprom_update_r18>
+ 5c6:	41 50       	subi	r20, 0x01	; 1
+ 5c8:	50 40       	sbci	r21, 0x00	; 0
+ 5ca:	d0 f7       	brcc	.-12     	; 0x5c0 <eeprom_update_block+0x12>
+ 5cc:	08 95       	ret
 
-00000446 <eeprom_update_byte>:
- 446:	26 2f       	mov	r18, r22
+000005ce <eeprom_update_byte>:
+ 5ce:	26 2f       	mov	r18, r22
 
-00000448 <eeprom_update_r18>:
- 448:	e1 99       	sbic	0x1c, 1	; 28
- 44a:	fe cf       	rjmp	.-4      	; 0x448 <eeprom_update_r18>
- 44c:	9f bb       	out	0x1f, r25	; 31
- 44e:	8e bb       	out	0x1e, r24	; 30
- 450:	e0 9a       	sbi	0x1c, 0	; 28
- 452:	01 97       	sbiw	r24, 0x01	; 1
- 454:	0d b2       	in	r0, 0x1d	; 29
- 456:	02 16       	cp	r0, r18
- 458:	31 f0       	breq	.+12     	; 0x466 <eeprom_update_r18+0x1e>
- 45a:	2d bb       	out	0x1d, r18	; 29
- 45c:	0f b6       	in	r0, 0x3f	; 63
- 45e:	f8 94       	cli
- 460:	e2 9a       	sbi	0x1c, 2	; 28
- 462:	e1 9a       	sbi	0x1c, 1	; 28
- 464:	0f be       	out	0x3f, r0	; 63
- 466:	08 95       	ret
+000005d0 <eeprom_update_r18>:
+ 5d0:	e1 99       	sbic	0x1c, 1	; 28
+ 5d2:	fe cf       	rjmp	.-4      	; 0x5d0 <eeprom_update_r18>
+ 5d4:	9f bb       	out	0x1f, r25	; 31
+ 5d6:	8e bb       	out	0x1e, r24	; 30
+ 5d8:	e0 9a       	sbi	0x1c, 0	; 28
+ 5da:	01 97       	sbiw	r24, 0x01	; 1
+ 5dc:	0d b2       	in	r0, 0x1d	; 29
+ 5de:	02 16       	cp	r0, r18
+ 5e0:	31 f0       	breq	.+12     	; 0x5ee <eeprom_update_r18+0x1e>
+ 5e2:	2d bb       	out	0x1d, r18	; 29
+ 5e4:	0f b6       	in	r0, 0x3f	; 63
+ 5e6:	f8 94       	cli
+ 5e8:	e2 9a       	sbi	0x1c, 2	; 28
+ 5ea:	e1 9a       	sbi	0x1c, 1	; 28
+ 5ec:	0f be       	out	0x3f, r0	; 63
+ 5ee:	08 95       	ret
 
-00000468 <_exit>:
- 468:	f8 94       	cli
+000005f0 <_exit>:
+ 5f0:	f8 94       	cli
 
-0000046a <__stop_program>:
- 46a:	ff cf       	rjmp	.-2      	; 0x46a <__stop_program>
+000005f2 <__stop_program>:
+ 5f2:	ff cf       	rjmp	.-2      	; 0x5f2 <__stop_program>
