@@ -6,6 +6,7 @@
  */ 
 
 
+// #define F_CPU 16000000UL
 #define F_CPU 16000000UL
 
 #include <avr/io.h>
@@ -145,9 +146,8 @@ int main(void)
 	mcu_init(); //initialize microcontroller
 
 	 while (1)
-	 {
-
-     	
+	 {	
+		
 		if(_night_time())
 		{	
 			
@@ -162,7 +162,6 @@ int main(void)
 				close_door(LLT1_DOOR_PIN1, LLT1_DOOR_PIN2);
 				DDRB &= ~ ( (1<<LLT1_DOOR_PIN1) | ( (1<<LLT1_DOOR_PIN2)) ); //Deactivate manual opening for LLT1 door
 				sound_alarm();   //raise alarm for 10s
-				light_off(LLT1);
 			}
 			else
 			{
@@ -176,7 +175,6 @@ int main(void)
 				close_door(LLT2_DOOR_PIN2, LLT2_DOOR_PIN1);
 				DDRB &= ~ ( (1<<LLT2_DOOR_PIN1) | ( (1<<LLT2_DOOR_PIN2)) ); //Deactivate manual opening for LLT2 door
 				sound_alarm();   //raise alarm for 10s
-				light_off(LLT2);
 			}
 			else
 			{
@@ -223,7 +221,7 @@ int main(void)
 			}
 		}
 		
-		//_delay_ms(50);
+		_delay_ms(50);
 	 }
 	
 
@@ -879,16 +877,16 @@ void mcu_init()
 	DDRD |= (1<<ALARM_PIN); //set alarm pin as output 
 	
 	//USART INIT
-	UBRRL = 0X67; //Set baud rate to 9600 for 16MHz clock 
+	UBRRL = 0X67; //Set baud rate to 9600 for 16MHz clock and we have set U2X = 0 for normal speed
 	UCSRC = (1 << UCSZ1) | (1 << UCSZ0) | (URSEL); // Set frame format: 8 data bits, 1 stop bit
-	UCSRB =(1<<RXEN)|(1<<TXEN)| (1 << RXCIE); //Enable serial reception and transmission
+	UCSRB =(1<<RXEN)|(1<<TXEN)| (1 << RXCIE); //Enable serial reception and transmission, activating interrupt upon serial reception
 	sei();  // Enable global interrupts
-   // UCSRA |= (1 << U2X); // Set the U2X bit in the UCSRA register to double transmission speed
+    //UCSRA |= (1 << U2X); // Set the U2X bit in the UCSRA register to double transmission speed
 
 
    //RTC INITIALIZATION
    rtc_init();
-   rtc_setTime(0X21, 0X30, 0X59);
+   rtc_setTime(0X23, 0X20, 0X59);
 
 }
 
