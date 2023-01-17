@@ -886,7 +886,7 @@ void mcu_init()
 
    //RTC INITIALIZATION
    rtc_init();
-   rtc_setTime(0X23, 0X20, 0X59);
+   rtc_setTime(0X14, 0X40, 0X00);
 
 }
 
