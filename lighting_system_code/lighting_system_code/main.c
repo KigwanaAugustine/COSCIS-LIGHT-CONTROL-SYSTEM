@@ -2,11 +2,9 @@
  * lighting_system_code.c
  *
  * Created: 1/5/2023 15:40:37
- * Author : Tanuki
+ * Author :KIGWANA AUGUSTINE
  */ 
 
-
-// #define F_CPU 16000000UL
 #define F_CPU 16000000UL
 
 #include <avr/io.h>
@@ -1076,16 +1074,12 @@ void light_off(int pin)
 			{
 				get_current_time(); //change value of timer 
 				strcat(LLT4_time, timer);
-				//  USART_Transmit_String(" LLT1_str_2 ");
-				//  USART_Transmit_String(LLT1_time);
 				eeprom_store_string(LLT4_time); 
 			}
 			else if (pin == SECURITY)
 			{
 				get_current_time(); //change value of timer 
 				strcat(SECURITY_time, timer);
-				//  USART_Transmit_String(" LLT1_str_2 ");
-				//  USART_Transmit_String(LLT1_time);
 				eeprom_store_string(SECURITY_time); 
 			}
 			
@@ -1097,8 +1091,6 @@ void light_off(int pin)
 //store string in EEPROM at the given address
 void eeprom_store_string(char * string)
 {
-	// USART_Transmit_String("str ");
-	// USART_Transmit_String(string);
 
 	//check if eeprom full and reset storage address
     if(next_address > last_address)
@@ -1166,25 +1158,6 @@ void send_stored_timestamps()
 void activate_manual_light_switch()
 {
 	
-	// if (switch_pressed(LLT1_SWITCH))
-	// {
-	// 	light_on(LLT1);
-	// }
-	// else
-	// {
-	// 	light_off(LLT1);
-	// }
-	
-	
-	// if(switch_pressed(LLT2_SWITCH))
-	// {
-	// 	light_on(LLT2);
-	// }
-	// else
-	// {
-	// 	light_off(LLT2);
-	// }
-	
 	if(switch_pressed(LLT3_SWITCH))
 	{
 		light_on(LLT3);
@@ -1202,22 +1175,9 @@ void activate_manual_light_switch()
 	{
 		light_off(LLT4);
 	}
-	
-	// if(switch_pressed(SECURITY_SWITCH))
-	// {
-	// 	light_on(SECURITY);
-	// }
-
-	// if(!switch_pressed(SECURITY_SWITCH))
-	// {
-	// 	light_off(SECURITY);
-	// }
-	// else
-	// {
-	// 	light_off(SECURITY);
-	// }
 
 }
+
 
 
 //turns all lights on
@@ -1228,6 +1188,7 @@ void all_lights_on()
 	light_on(LLT3);
 	light_on(LLT4);
 }
+
 
 //turns all lights off
 void all_lights_off()
